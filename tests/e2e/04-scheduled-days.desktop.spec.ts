@@ -10,13 +10,18 @@
  */
 
 import { test, expect } from "@playwright/test";
-import { db, latestDonationFor, setClock } from "../helpers/db";
+import { db, latestDonationFor, resetAppState, setClock, SEED } from "../helpers/db";
 import { donateViaMock } from "../helpers/flows";
 import * as path from "node:path";
 
 const DONOR_EMAIL = "test04@feedsomeone.test";
 
 test.beforeAll(async ({ request }) => {
+  // Deterministic pool: reset (restores 8 available) then leave EXACTLY 5, so
+  // day 1 (5 meals) fills completely and days 2–7 stay unassigned regardless of
+  // how many earlier specs consumed the shared pool.
+  await resetAppState();
+  await db().from("photos").update({ status: "rejected" }).in("id", SEED.POOL_PHOTO_IDS.slice(5));
   await setClock(request, null).catch(() => {});
 });
 
@@ -33,7 +38,8 @@ test("04 — daily streak 5/day × 7 days DB structure", async ({ page }) => {
   });
 
   // ── /thanks mention of 7 days ─────────────────────────────────────────────
-  await expect(page.getByText(/7 days/)).toBeVisible();
+  // /7 days/ matches both the summary line and the day badge — take the first.
+  await expect(page.getByText(/7 days/).first()).toBeVisible();
 
   await page.screenshot({
     path: path.join("tests", "evidence", "04-thanks-days.png"),
