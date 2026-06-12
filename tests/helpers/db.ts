@@ -291,8 +291,7 @@ export async function resetAppState(): Promise<void> {
     .update({ status: "delivered" })
     .in("id", SEED.DELIVERED_PHOTO_IDS);
 
-  // 8. Clear clock override
-  await d
-    .from("app_settings")
-    .upsert({ key: "clock_override", value: null });
+  // 8. Clear clock override — DELETE (value is jsonb NOT NULL, so upserting null
+  //    silently fails and a stale far-future test date would leak into later tests).
+  await d.from("app_settings").delete().eq("key", "clock_override");
 }

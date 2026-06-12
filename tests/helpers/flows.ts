@@ -47,16 +47,16 @@ export async function donateViaMock(page: Page, opts: DonateOptions): Promise<st
 
   // ── Schedule (daily streak) ────────────────────────────────────────────────
   if (opts.scheduleDays !== undefined) {
-    // Click "Daily streak" frequency button
-    await page.getByRole("button", { name: "Daily streak" }).click();
-    // Click the "{N} days" chip — DAY_CHIPS = [3, 7, 14, 30]
+    // Frequency options are <button role="radio"> — query by the radio role.
+    await page.getByRole("radio", { name: "Daily streak" }).click();
+    // Click the "{N} days" chip — DAY_CHIPS = [3, 7, 14, 30] (plain buttons)
     await page.getByRole("button", { name: `${opts.scheduleDays} days` }).click();
   }
 
   // ── Recurring ─────────────────────────────────────────────────────────────
   if (opts.recurringCadence !== undefined) {
-    await page.getByRole("button", { name: "Ongoing" }).click();
-    // cadence buttons: "Daily" "Weekly" "Monthly"
+    await page.getByRole("radio", { name: "Ongoing" }).click();
+    // cadence buttons: "Daily" "Weekly" "Monthly" (plain buttons)
     await page.getByRole("button", { name: opts.recurringCadence, exact: true }).click();
   }
 

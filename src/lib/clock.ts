@@ -21,6 +21,13 @@ export async function now(): Promise<Date> {
 
 /** Test helper (route /api/test/clock uses it). */
 export async function setClockOverride(iso: string | null): Promise<void> {
-  await adminDb().from("app_settings").upsert({ key: "clock_override", value: iso ?? (null as unknown as string) });
+  // app_settings.value is `jsonb NOT NULL`, so we CANNOT upsert a null value to
+  // clear the override (it silently violates the constraint and the old value —
+  // e.g. a far-future test date — leaks into every later request). Delete to clear.
+  if (iso === null) {
+    await adminDb().from("app_settings").delete().eq("key", "clock_override");
+  } else {
+    await adminDb().from("app_settings").upsert({ key: "clock_override", value: iso });
+  }
   cache = null;
 }
