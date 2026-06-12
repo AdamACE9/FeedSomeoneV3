@@ -1,0 +1,54 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink: #211511;
+  --color-paper: #FFFDF9;
+  --color-clay: #C4471D;
+  --color-clay-deep: #A33713;
+  --color-marigold: #E8A33D;
+  --color-leaf: #3E6B3A;
+  --color-sand: #F3EBDD;
+  --color-line: #E5D9C6;
+  --font-display: var(--font-fraunces);
+  --font-body: var(--font-dm-sans);
+  --font-mono: var(--font-dm-mono);
+}
+
+@layer base {
+  html {
+    background: var(--color-paper);
+    color: var(--color-ink);
+  }
+
+  body {
+    font-family: var(--font-body), sans-serif;
+  }
+
+  ::selection {
+    background-color: var(--color-clay);
+    color: var(--color-paper);
+  }
+
+  a:focus-visible {
+    outline: 2px solid var(--color-clay);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* Photo-timestamp motif utility */
+.timestamp {
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+}

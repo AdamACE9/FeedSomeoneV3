@@ -1,0 +1,44 @@
+{
+  "name": "feedsomeone",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit",
+    "setup": "bash scripts/bootstrap.sh",
+    "db:reset": "supabase db reset",
+    "db:types": "supabase gen types typescript --local > src/lib/supabase/database.types.ts",
+    "dev:cron": "node scripts/dev-cron.mjs",
+    "test:e2e": "playwright test"
+  },
+  "dependencies": {
+    "next": "16.2.9",
+    "react": "^19.2",
+    "react-dom": "^19.2",
+    "@supabase/supabase-js": "^2",
+    "@supabase/ssr": "latest",
+    "sharp": "^0.35",
+    "date-fns": "^4",
+    "date-fns-tz": "latest",
+    "stripe": "latest",
+    "resend": "latest",
+    "@react-email/components": "latest",
+    "@react-email/render": "latest",
+    "pdf-lib": "latest",
+    "qrcode": "latest",
+    "zod": "latest"
+  },
+  "devDependencies": {
+    "typescript": "^5",
+    "@types/node": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "@types/qrcode": "latest",
+    "tailwindcss": "^4",
+    "@tailwindcss/postcss": "^4",
+    "postcss": "latest",
+    "@playwright/test": "latest"
+  }
+}
