@@ -51,7 +51,7 @@ test("03 — qty 10 +25% tip: summary lines + DB separation", async ({ page }) =
   // Now complete the donation
   await page.locator('input[placeholder="your email — no account needed"]').fill(DONOR_EMAIL);
   // Leave tip at +25% (pre-selected default)
-  await page.locator("button").filter({ hasText: /^Feed/ }).click();
+  await page.getByRole("button", { name: /Feed .*\u00b7.*\u2192/ }).click();
 
   await page.waitForURL(/\/mock-checkout\//);
   await page.getByRole("button", { name: "Pay (test) →" }).click();

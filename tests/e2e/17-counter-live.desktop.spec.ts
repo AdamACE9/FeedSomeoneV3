@@ -32,9 +32,9 @@ test("17 — live counter updates after donation [slow]", async ({ page, context
 
   // ── 1. Open landing page and read initial counter ─────────────────────────
   await page.goto("/");
-  await page.waitForLoadState("networkidle");
+  await page.waitForLoadState("domcontentloaded");
 
-  const counterPill = page.locator("span").filter({ hasText: /fed today/ });
+  const counterPill = page.locator("span").filter({ hasText: /fed today/ }).first();
   await expect(counterPill).toBeVisible();
 
   const initialText = await counterPill.textContent();
@@ -53,7 +53,7 @@ test("17 — live counter updates after donation [slow]", async ({ page, context
   await donorPage.getByRole("button", { name: "1", exact: true }).click();
   await donorPage.getByRole("button", { name: "No thanks", exact: true }).click();
   await donorPage.locator('input[placeholder="your email — no account needed"]').fill(DONOR_EMAIL);
-  await donorPage.locator("button").filter({ hasText: /^Feed/ }).click();
+  await donorPage.getByRole("button", { name: /Feed .*\u00b7.*\u2192/ }).click();
 
   await donorPage.waitForURL(/\/mock-checkout\//);
   await donorPage.getByRole("button", { name: "Pay (test) →" }).click();

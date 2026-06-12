@@ -8,7 +8,7 @@
 
 import { test, expect } from "@playwright/test";
 import { db, setClock } from "../helpers/db";
-import { tinyJpegBuffer } from "../helpers/flows";
+import { makeTestJpeg } from "../helpers/flows";
 import * as path from "node:path";
 
 const KITCHEN_EMAIL = "kitchen@feedsomeone.com";
@@ -56,12 +56,11 @@ test("14 — kitchen login, upload page structure, upload 2 photos, dup detectio
   await expect(page.getByText("Today")).toBeVisible();
   await expect(page.getByText("All-time")).toBeVisible();
 
-  // ── 3. Upload 2 distinct tiny JPEGs ──────────────────────────────────────
-  // The file input is hidden (tabIndex=-1) — use setInputFiles on the hidden input
-  const jpegA = tinyJpegBuffer();
-  // Create a slightly different second JPEG by modifying a byte (different perceptual hash)
-  const jpegB = Buffer.from(jpegA);
-  jpegB[jpegB.length - 10] = 0xff; // minimal change
+  // ── 3. Upload 2 distinct JPEGs ────────────────────────────────────────────
+  // The file input is hidden (tabIndex=-1) — use setInputFiles on the hidden input.
+  // Two different seeds → different content → different dHashes (both 'available').
+  const jpegA = await makeTestJpeg(1);
+  const jpegB = await makeTestJpeg(2);
 
   const fileInput = page.locator("input[type='file']");
 

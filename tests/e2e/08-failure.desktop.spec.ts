@@ -37,7 +37,7 @@ test("08 — simulate payment failure, donation marked failed, email sent", asyn
   await page.locator('input[placeholder="your email — no account needed"]').fill(DONOR_EMAIL);
 
   // Click pay button
-  await page.locator("button").filter({ hasText: /^Feed/ }).click();
+  await page.getByRole("button", { name: /Feed .*\u00b7.*\u2192/ }).click();
 
   // ── Mock checkout page ────────────────────────────────────────────────────
   await page.waitForURL(/\/mock-checkout\//);

@@ -1,0 +1,124 @@
+﻿
+> feedsomeone@0.1.0 dev
+> next dev
+
+▲ Next.js 16.2.9 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.0.104:3000
+- Environments: .env.local
+✓ Ready in 651ms
+node.exe : ⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
+At C:\Program Files\nodejs\npm.ps1:29 char:3
++   & $NODE_EXE $NPM_CLI_JS $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (⚠ Warning: Next...not be correct.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ We detected multiple lockfiles and selected the directory of C:\Users\Adam Ahmed Danish\package-lock.json as the root 
+directory.
+ To silence this warning, set `turbopack.root` in your Next.js config, or consider removing one of the lockfiles if 
+it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack#root-directory for more information.
+ Detected additional lockfiles: 
+   * C:\Users\Adam Ahmed Danish\OneDrive\Adamcodingstuff\FeedSomeoneV3\package-lock.json
+   * C:\Users\Adam Ahmed Danish\OneDrive\Adamcodingstuff\package-lock.json
+
+
+ GET /api/health 200 in 2.4s (next.js: 235ms, application-code: 2.2s)
+ GET / 200 in 3.0s (next.js: 368ms, application-code: 2.6s)
+ GET / 200 in 1396ms (next.js: 3ms, application-code: 1393ms)
+ GET / 200 in 1238ms (next.js: 5ms, application-code: 1232ms)
+ GET /api/counter/stream 200 in 4.3s (next.js: 40ms, application-code: 4.2s)
+ POST /api/test/clock 200 in 363ms (next.js: 53ms, application-code: 309ms)
+ POST /api/test/clock 200 in 287ms (next.js: 4ms, application-code: 283ms)
+ GET /donate 200 in 179ms (next.js: 56ms, application-code: 123ms)
+ POST /api/test/clock 200 in 459ms (next.js: 4ms, application-code: 455ms)
+ POST /api/test/clock 200 in 356ms (next.js: 4ms, application-code: 353ms)
+ GET /donate 200 in 53ms (next.js: 4ms, application-code: 49ms)
+ POST /api/checkout 200 in 2.2s (next.js: 933ms, application-code: 1261ms)
+ GET /mock-checkout/mock_cs_6f1158bd-f4e6-46d5-899b-7caa21f8f9df?donation=6f1158bd-f4e6-46d5-899b-7caa21f8f9df&mode=payment&success=http%3A%2F%2Flocalhost%3A3000%2Fthanks%2F6f1158bd-f4e6-46d5-899b-7caa21f8f9df&cancel=http%3A%2F%2Flocalhost%3A3000%2Fdonate%3Fcanceled%3D1 200 in 2.1s (next.js: 1448ms, application-code: 692ms)
+ POST /api/webhooks/payment 200 in 9.1s (next.js: 529ms, application-code: 8.6s)
+ GET /thanks/6f1158bd-f4e6-46d5-899b-7caa21f8f9df 200 in 2.6s (next.js: 1849ms, application-code: 794ms)
+ POST /mock-checkout/mock_cs_6f1158bd-f4e6-46d5-899b-7caa21f8f9df?donation=6f1158bd-f4e6-46d5-899b-7caa21f8f9df&mode=payment&success=http%3A%2F%2Flocalhost%3A3000%2Fthanks%2F6f1158bd-f4e6-46d5-899b-7caa21f8f9df&cancel=http%3A%2F%2Flocalhost%3A3000%2Fdonate%3Fcanceled%3D1 303 in 11.8s (next.js: 13ms, application-code: 11.8s)
+  └─ ƒ payMockSession({}) in 9106ms src/app/mock-checkout/[sessionId]/actions.ts
+ POST /api/test/clock 200 in 316ms (next.js: 5ms, application-code: 312ms)
+ POST /api/test/clock 200 in 313ms (next.js: 4ms, application-code: 310ms)
+ GET /donate 200 in 132ms (next.js: 5ms, application-code: 126ms)
+ POST /api/test/clock 200 in 976ms (next.js: 3ms, application-code: 973ms)
+ POST /api/test/clock 200 in 406ms (next.js: 2ms, application-code: 403ms)
+ GET /donate 200 in 59ms (next.js: 5ms, application-code: 55ms)
+ POST /api/test/clock 200 in 654ms (next.js: 5ms, application-code: 649ms)
+ POST /api/test/clock 200 in 307ms (next.js: 3ms, application-code: 305ms)
+ GET /donate 200 in 56ms (next.js: 4ms, application-code: 52ms)
+ POST /api/test/clock 200 in 648ms (next.js: 3ms, application-code: 645ms)
+ POST /api/test/clock 200 in 303ms (next.js: 3ms, application-code: 300ms)
+ GET /donate 200 in 59ms (next.js: 4ms, application-code: 56ms)
+ POST /api/test/clock 200 in 600ms (next.js: 3ms, application-code: 598ms)
+ POST /api/test/clock 200 in 299ms (next.js: 2ms, application-code: 296ms)
+ GET /donate 200 in 54ms (next.js: 5ms, application-code: 49ms)
+ POST /api/test/clock 200 in 450ms (next.js: 4ms, application-code: 445ms)
+ POST /api/test/clock 200 in 373ms (next.js: 3ms, application-code: 370ms)
+ GET /donate 200 in 61ms (next.js: 4ms, application-code: 57ms)
+ POST /api/test/clock 200 in 590ms (next.js: 2ms, application-code: 587ms)
+ POST /api/test/clock 200 in 409ms (next.js: 3ms, application-code: 406ms)
+ GET /donate 200 in 65ms (next.js: 3ms, application-code: 62ms)
+ POST /api/checkout 200 in 696ms (next.js: 4ms, application-code: 692ms)
+ GET /mock-checkout/mock_cs_621902dd-d434-4b07-b1c7-d2c091cdf68c?donation=621902dd-d434-4b07-b1c7-d2c091cdf68c&mode=payment&success=http%3A%2F%2Flocalhost%3A3000%2Fthanks%2F621902dd-d434-4b07-b1c7-d2c091cdf68c&cancel=http%3A%2F%2Flocalhost%3A3000%2Fdonate%3Fcanceled%3D1 200 in 679ms (next.js: 11ms, application-code: 668ms)
+ POST /api/webhooks/payment 200 in 8.4s (next.js: 3ms, application-code: 8.4s)
+ GET /thanks/621902dd-d434-4b07-b1c7-d2c091cdf68c 200 in 673ms (next.js: 12ms, application-code: 661ms)
+ POST /mock-checkout/mock_cs_621902dd-d434-4b07-b1c7-d2c091cdf68c?donation=621902dd-d434-4b07-b1c7-d2c091cdf68c&mode=payment&success=http%3A%2F%2Flocalhost%3A3000%2Fthanks%2F621902dd-d434-4b07-b1c7-d2c091cdf68c&cancel=http%3A%2F%2Flocalhost%3A3000%2Fdonate%3Fcanceled%3D1 303 in 9.1s (next.js: 13ms, application-code: 9.1s)
+  └─ ƒ payMockSession({}) in 8375ms src/app/mock-checkout/[sessionId]/actions.ts
+ POST /api/test/clock 200 in 299ms (next.js: 3ms, application-code: 296ms)
+ POST /api/test/clock 200 in 277ms (next.js: 3ms, application-code: 274ms)
+ GET /donate 200 in 68ms (next.js: 3ms, application-code: 65ms)
+ POST /api/test/clock 200 in 786ms (next.js: 2ms, application-code: 784ms)
+ POST /api/test/clock 200 in 366ms (next.js: 3ms, application-code: 364ms)
+ POST /api/test/clock 200 in 281ms (next.js: 3ms, application-code: 278ms)
+ GET /donate 200 in 49ms (next.js: 3ms, application-code: 46ms)
+ POST /api/test/clock 200 in 576ms (next.js: 4ms, application-code: 572ms)
+ POST /api/test/clock 200 in 4.1s (next.js: 3ms, application-code: 4.1s)
+ GET /donate 200 in 46ms (next.js: 3ms, application-code: 43ms)
+ POST /api/test/clock 200 in 711ms (next.js: 3ms, application-code: 708ms)
+ POST /api/test/clock 200 in 315ms (next.js: 2ms, application-code: 313ms)
+ GET /q/test-school 302 in 1196ms (next.js: 912ms, application-code: 284ms)
+ GET /donate?qr=test-school&qty=5 200 in 51ms (next.js: 3ms, application-code: 48ms)
+ POST /api/checkout 200 in 1217ms (next.js: 3ms, application-code: 1214ms)
+ GET /mock-checkout/mock_cs_dc9c3556-5dd0-4f09-9f1f-27a4655e1f3d?donation=dc9c3556-5dd0-4f09-9f1f-27a4655e1f3d&mode=payment&success=http%3A%2F%2Flocalhost%3A3000%2Fthanks%2Fdc9c3556-5dd0-4f09-9f1f-27a4655e1f3d&cancel=http%3A%2F%2Flocalhost%3A3000%2Fdonate%3Fcanceled%3D1 200 in 633ms (next.js: 10ms, application-code: 623ms)
+ POST /api/webhooks/payment 200 in 8.4s (next.js: 2ms, application-code: 8.4s)
+ GET /thanks/dc9c3556-5dd0-4f09-9f1f-27a4655e1f3d 200 in 1067ms (next.js: 11ms, application-code: 1056ms)
+ POST /mock-checkout/mock_cs_dc9c3556-5dd0-4f09-9f1f-27a4655e1f3d?donation=dc9c3556-5dd0-4f09-9f1f-27a4655e1f3d&mode=payment&success=http%3A%2F%2Flocalhost%3A3000%2Fthanks%2Fdc9c3556-5dd0-4f09-9f1f-27a4655e1f3d&cancel=http%3A%2F%2Flocalhost%3A3000%2Fdonate%3Fcanceled%3D1 303 in 9.5s (next.js: 12ms, application-code: 9.5s)
+  └─ ƒ payMockSession({}) in 8441ms src/app/mock-checkout/[sessionId]/actions.ts
+ POST /api/test/clock 200 in 276ms (next.js: 2ms, application-code: 274ms)
+ POST /api/test/clock 200 in 275ms (next.js: 3ms, application-code: 272ms)
+ GET / 200 in 1862ms (next.js: 4ms, application-code: 1857ms)
+ GET /api/counter 200 in 422ms (next.js: 139ms, application-code: 283ms)
+ GET /donate 200 in 55ms (next.js: 5ms, application-code: 50ms)
+ GET /api/counter/stream 200 in 88s (next.js: 3ms, application-code: 88s)
+ POST /api/test/clock 200 in 367ms (next.js: 3ms, application-code: 363ms)
+ POST /api/test/clock 200 in 286ms (next.js: 4ms, application-code: 282ms)
+ GET / 200 in 1751ms (next.js: 5ms, application-code: 1746ms)
+ GET /api/counter/stream 200 in 1482ms (next.js: 4ms, application-code: 1478ms)
+ GET /donate?qty=1 200 in 87ms (next.js: 5ms, application-code: 81ms)
+ POST /api/test/clock 200 in 395ms (next.js: 3ms, application-code: 392ms)
+ POST /api/test/clock 200 in 277ms (next.js: 3ms, application-code: 275ms)
+ GET /donate 200 in 54ms (next.js: 4ms, application-code: 50ms)
+ POST /api/test/clock 200 in 564ms (next.js: 3ms, application-code: 561ms)
+ POST /api/test/clock 200 in 460ms (next.js: 3ms, application-code: 458ms)
+ GET /kitchen/login 200 in 109ms (next.js: 55ms, application-code: 55ms)
+ GET /kitchen 200 in 2.6s (next.js: 57ms, application-code: 2.6s)
+ POST /kitchen/login 303 in 3.4s (next.js: 4ms, application-code: 3.3s)
+  └─ ƒ signInAction({"error":null}, {}) in 723ms src/app/kitchen/login/actions.ts
+ POST /api/photos/upload 200 in 1277ms (next.js: 416ms, application-code: 861ms)
+ POST /api/photos/upload 200 in 844ms (next.js: 3ms, application-code: 841ms)
+ POST /api/test/clock 200 in 273ms (next.js: 3ms, application-code: 270ms)
+ POST /api/test/clock 200 in 278ms (next.js: 3ms, application-code: 275ms)
+ GET /admin/login 200 in 145ms (next.js: 76ms, application-code: 69ms)
+ POST /admin/login 200 in 994ms (next.js: 4ms, application-code: 989ms)
+  └─ ƒ adminLoginAction({}) in 383ms src/lib/admin-actions.ts
+ GET /admin/password 200 in 770ms (next.js: 4ms, application-code: 766ms)
+ GET /admin/password 200 in 862ms (next.js: 53ms, application-code: 808ms)
+ GET /admin 200 in 2.5s (next.js: 8ms, application-code: 2.5s)
+ GET /admin 200 in 2.9s (next.js: 77ms, application-code: 2.8s)
+ POST /api/test/clock 200 in 272ms (next.js: 3ms, application-code: 269ms)
+✓ Compiled in 164ms
+✓ Compiled in 115ms

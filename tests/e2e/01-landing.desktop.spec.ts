@@ -13,14 +13,14 @@ test.afterAll(async ({ request }) => {
 
 test("01 — landing page loads with required sections and copy", async ({ page }) => {
   await page.goto("/");
-  await page.waitForLoadState("networkidle");
+  await page.waitForLoadState("domcontentloaded");
 
   // ── h1 ──────────────────────────────────────────────────────────────────
   await expect(page.getByRole("heading", { level: 1 })).toContainText("Feed one child");
 
   // ── counter pill ─────────────────────────────────────────────────────────
   // LiveCounter renders "N children fed today" inside a <span>
-  await expect(page.locator("span").filter({ hasText: /fed today/ })).toBeVisible();
+  await expect(page.locator("span").filter({ hasText: /fed today/ }).first()).toBeVisible();
 
   // ── CTA link text ─────────────────────────────────────────────────────────
   // "Feed one child · ₹25 →"  (or USD equivalent but always contains "Feed one child")
@@ -39,12 +39,12 @@ test("01 — landing page loads with required sections and copy", async ({ page 
 
   // ── Stats band badge ──────────────────────────────────────────────────────
   await expect(
-    page.locator("span").filter({ hasText: "100% goes to meals — zero admin fee." }),
+    page.locator("span").filter({ hasText: "100% goes to meals — zero admin fee." }).first(),
   ).toBeVisible();
 
   // ── Team names ────────────────────────────────────────────────────────────
-  await expect(page.getByText("Danish Ahmed")).toBeVisible();
-  await expect(page.getByText("Adam Ahmed")).toBeVisible();
+  await expect(page.getByText("Danish Ahmed").first()).toBeVisible();
+  await expect(page.getByText("Adam Ahmed").first()).toBeVisible();
 
   // ── Screenshot evidence ────────────────────────────────────────────────────
   await page.screenshot({

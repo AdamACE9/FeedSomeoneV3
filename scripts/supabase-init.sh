@@ -167,11 +167,22 @@ else
   npx supabase db push
   ok "Migrations pushed"
 
+  # Seed data: `db push` applies migrations only, NOT seed.sql. Apply it explicitly.
+  echo ""
+  echo "Applying seed.sql to the cloud database..."
+  PROJECT_DB_URL="postgresql://postgres:${DB_PASSWORD}@db.${REF}.supabase.co:5432/postgres"
+  SUPABASE_DB_URL="$PROJECT_DB_URL" node scripts/apply-sql.mjs "$PROJECT_DB_URL" || \
+    warn "seed apply reported an issue — check above (migrations already pushed so dup-table errors are expected/skippable)"
+
   echo ""
   echo "API keys:"
   npx supabase projects api-keys --project-ref "$REF"
   echo ""
   warn "Update apphosting.yaml with the cloud NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY"
   warn "Then run: firebase apphosting:secrets:set SUPABASE_SERVICE_ROLE_KEY"
+  echo ""
+  warn "TWO REQUIRED post-seed steps for cloud (need cloud keys in .env.local first):"
+  echo "  1. node scripts/fix-auth.mjs    # raw-SQL auth.users hashes aren't GoTrue-valid; this repairs admin+kitchen logins"
+  echo "  2. node scripts/seed-images.mjs # uploads the 12 placeholder meal photos to Storage"
   ok "═══ CLOUD SETUP DONE — ref: $REF ══════════════════════"
 fi

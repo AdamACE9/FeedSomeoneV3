@@ -22,10 +22,12 @@ import * as path from "node:path";
 const DONOR_EMAIL = "test18@feedsomeone.test";
 
 test.use({
-  // Override headers for this test to simulate a US visitor
+  // Simulate a US visitor: x-country header → server resolves USD, AND a US timezone
+  // so the form's client-side tzCurrencyHint returns null (won't override to INR/AED).
   extraHTTPHeaders: {
     "x-country": "US",
   },
+  timezoneId: "America/New_York",
 });
 
 test.beforeAll(async ({ request }) => {
@@ -39,7 +41,7 @@ test.afterAll(async ({ request }) => {
 test("18 — USD visitor: min qty warning at 1, complete at qty 2", async ({ page }) => {
   // ── 1. Landing CTA shows $ ───────────────────────────────────────────────
   await page.goto("/");
-  await page.waitForLoadState("networkidle");
+  await page.waitForLoadState("domcontentloaded");
 
   // CTA "Feed one child · $X →" — price should contain "$"
   const cta = page.getByRole("link", { name: /Feed one child/ }).first();
@@ -67,7 +69,7 @@ test("18 — USD visitor: min qty warning at 1, complete at qty 2", async ({ pag
   // Pay button should be present but the minimum warning visible means blocked
   // The button text shows "Feed 1 child" — but the validation fires on click
   // Let's verify the warning is shown and the pay button exists
-  await expect(page.locator("button").filter({ hasText: /^Feed/ })).toBeVisible();
+  await expect(page.getByRole("button", { name: /Feed .*\u00b7.*\u2192/ })).toBeVisible();
 
   await page.screenshot({
     path: path.join("tests", "evidence", "18-usd-min-warning.png"),
@@ -92,7 +94,7 @@ test("18 — USD visitor: min qty warning at 1, complete at qty 2", async ({ pag
   // ── 4. Complete donation at qty 2 ─────────────────────────────────────────
   await page.getByRole("button", { name: "No thanks", exact: true }).click();
   await page.locator('input[placeholder="your email — no account needed"]').fill(DONOR_EMAIL);
-  await page.locator("button").filter({ hasText: /^Feed/ }).click();
+  await page.getByRole("button", { name: /Feed .*\u00b7.*\u2192/ }).click();
 
   await page.waitForURL(/\/mock-checkout\//);
   await page.getByRole("button", { name: "Pay (test) →" }).click();

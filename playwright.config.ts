@@ -1,4 +1,4 @@
-import { defineConfig, devices } from "@playwright/test";
+import { defineConfig } from "@playwright/test";
 
 /**
  * FeedSomeone E2E suite.
@@ -26,6 +26,12 @@ export default defineConfig({
     baseURL: "http://localhost:3000",
     screenshot: "only-on-failure",
     trace: "retain-on-failure",
+    // The dev machine is in Asia/Dubai, so the donate form's client-side currency
+    // detection (tzCurrencyHint) resolves to AED, whose Stripe minimum is 2 — which
+    // blocks every qty-1 test and changes amounts. Pin to Asia/Kolkata so the suite
+    // runs as an INR donor (the ₹25 base the specs assume). Spec 18 overrides this.
+    timezoneId: "Asia/Kolkata",
+    locale: "en-IN",
   },
 
   projects: [
@@ -33,8 +39,9 @@ export default defineConfig({
       name: "desktop",
       // Exclude *.mobile.spec.ts from the desktop project
       testMatch: /.*\.desktop\.spec\.ts$/,
+      // plain bundled Chromium — no branded-Chrome channel, no WebKit
       use: {
-        ...devices["Desktop Chrome"],
+        browserName: "chromium",
         viewport: { width: 1440, height: 900 },
       },
     },
@@ -43,10 +50,12 @@ export default defineConfig({
       // Only *.mobile.spec.ts in the mobile project
       testMatch: /.*\.mobile\.spec\.ts$/,
       use: {
-        ...devices["iPhone 13"],
+        browserName: "chromium",
         viewport: { width: 390, height: 844 },
         isMobile: true,
         hasTouch: true,
+        userAgent:
+          "Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Mobile Safari/537.36",
       },
     },
   ],

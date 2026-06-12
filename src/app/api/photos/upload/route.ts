@@ -99,7 +99,8 @@ export async function POST(req: NextRequest) {
 
       if (dupRows && dupRows.length > 0) {
         photoStatus = "flagged";
-        dupOf = dupRows[0].id as string;
+        // find_similar_photo returns the column aliased as `photo_id`
+        dupOf = (dupRows[0].photo_id ?? dupRows[0].id) as string;
       }
 
       // taken_at = upload moment (real wall-clock, never test clock)

@@ -91,21 +91,13 @@ export async function donateViaMock(page: Page, opts: DonateOptions): Promise<st
   // placeholder: "your email — no account needed"
   await page.locator('input[placeholder="your email — no account needed"]').fill(opts.email);
   if (opts.firstName) {
-    // placeholder contains "first name"
-    await page
-      .locator("input")
-      .filter({ hasText: /first name/ })
-      .first()
-      // use fill on placeholder match
-      .or(page.locator('input[placeholder*="first name"]'))
-      .first()
-      .fill(opts.firstName);
+    await page.locator('input[placeholder*="first name"]').fill(opts.firstName);
   }
 
   // ── Pay button ────────────────────────────────────────────────────────────
   // Text: "Feed one child · ₹25 →" or "Feed {N} children · {amount} →"
   // Starts with "Feed" in all cases
-  await page.locator("button").filter({ hasText: /^Feed/ }).click();
+  await page.getByRole("button", { name: /Feed .*\u00b7.*\u2192/ }).click();
 
   // ── Mock checkout ─────────────────────────────────────────────────────────
   await page.waitForURL(/\/mock-checkout\//);
@@ -122,17 +114,22 @@ export async function donateViaMock(page: Page, opts: DonateOptions): Promise<st
 }
 
 /**
- * Tiny valid JPEG (1×1 red pixel) as a Buffer.
- * Embedded as base64 so tests don't need sharp or a file dependency.
+ * A genuinely valid JPEG with deterministic, seed-dependent content, built with
+ * sharp (already a dependency). Different seeds yield different pixels — and thus
+ * different dHashes — so the kitchen dup-detection test can rely on it: the same
+ * seed re-uploaded is a duplicate; different seeds are not.
  */
-export function tinyJpegBuffer(): Buffer {
-  // 1×1 red pixel JPEG, minimal valid JFIF
-  const B64 =
-    "/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8U" +
-    "HRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgN" +
-    "DRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIy" +
-    "MjL/wAARCAABAAEDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAABgUE/8QAIhAAAQQB" +
-    "BAMAAAAAAAAAAAAAAQACAxEEBSExQf/EABQBAQAAAAAAAAAAAAAAAAAAAAD/xAAUEQEAAAAA" +
-    "AAAAAAAAAAAAAP/aAAwDAQACEQMRAD8Aq3lxlKpQyZ+lPaHSOQSSSSTQBLajdCiiig//2Q==";
-  return Buffer.from(B64, "base64");
+export async function makeTestJpeg(seed: number): Promise<Buffer> {
+  const sharp = (await import("sharp")).default;
+  const w = 32, h = 32;
+  const px = Buffer.alloc(w * h * 3);
+  for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
+      const i = (y * w + x) * 3;
+      px[i] = (x * 8 + seed * 40) % 256;       // R varies across x + seed
+      px[i + 1] = (y * 8 + seed * 15) % 256;   // G varies across y
+      px[i + 2] = (x * y + seed * 30) % 256;   // B varies diagonally
+    }
+  }
+  return sharp(px, { raw: { width: w, height: h, channels: 3 } }).jpeg().toBuffer();
 }

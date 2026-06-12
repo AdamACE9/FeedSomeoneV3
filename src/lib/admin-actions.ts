@@ -48,13 +48,22 @@ export async function adminChangePasswordAction(actorEmail: string, newPassword:
   if (!newPassword || newPassword.length < 8) return { error: "Password must be at least 8 characters." };
   const { serverClient } = await import("@/lib/supabase/server");
   const supa = await serverClient();
+  // Capture identity BEFORE the password update — rotating the password can
+  // disturb the session so a getUser() afterwards may return null, which would
+  // silently skip clearing the flag and trap the admin on this page forever.
+  const { data: { user: before } } = await supa.auth.getUser();
   const { error } = await supa.auth.updateUser({ password: newPassword });
   if (error) return { error: error.message };
-  // Clear must_change_password flag
-  const { data: { user } } = await supa.auth.getUser();
-  if (user) {
-    await adminDb().from("profiles").update({ must_change_password: false }).eq("user_id", user.id);
-    await audit(actorEmail, "password_changed", "profiles", user.id);
+  // Clear must_change_password using the pre-rotation identity; if the session
+  // was lost, fall back to matching the auth user by email via the admin API.
+  let userId = before?.id ?? null;
+  if (!userId) {
+    const { data: list } = await adminDb().auth.admin.listUsers();
+    userId = list?.users.find((u) => u.email?.toLowerCase() === actorEmail.toLowerCase())?.id ?? null;
+  }
+  if (userId) {
+    await adminDb().from("profiles").update({ must_change_password: false }).eq("user_id", userId);
+    await audit(actorEmail, "password_changed", "profiles", userId);
   }
   return { ok: true };
 }

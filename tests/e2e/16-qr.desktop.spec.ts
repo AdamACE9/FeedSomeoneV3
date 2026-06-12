@@ -69,7 +69,7 @@ test("16 — QR redirect preselects qty, donation records qr_campaign_id", async
   // Don't re-navigate — just fill remaining fields on the current page
   await page.getByRole("button", { name: "No thanks", exact: true }).click();
   await page.locator('input[placeholder="your email — no account needed"]').fill(DONOR_EMAIL);
-  await page.locator("button").filter({ hasText: /^Feed/ }).click();
+  await page.getByRole("button", { name: /Feed .*\u00b7.*\u2192/ }).click();
 
   await page.waitForURL(/\/mock-checkout\//);
   await page.getByRole("button", { name: "Pay (test) →" }).click();

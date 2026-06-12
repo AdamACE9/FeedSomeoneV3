@@ -40,14 +40,14 @@ async function tryAdminLogin(page: import("@playwright/test").Page): Promise<boo
   await page.getByRole("button", { name: "Sign in" }).click();
 
   // Check for success (redirect) or error
-  await page.waitForTimeout(1500);
+  await page.waitForURL((u) => !u.pathname.endsWith("/admin/login"), { timeout: 15000 }).catch(() => {});
 
   if (page.url().includes("/admin/login")) {
     // Original password failed — try new password
     await page.locator("#email").fill(ADMIN_EMAIL);
     await page.locator("#password").fill(NEW_PASSWORD);
     await page.getByRole("button", { name: "Sign in" }).click();
-    await page.waitForTimeout(1500);
+    await page.waitForURL((u) => !u.pathname.endsWith("/admin/login"), { timeout: 15000 }).catch(() => {});
     return false; // skipped password change flow
   }
   return true; // need to change password
