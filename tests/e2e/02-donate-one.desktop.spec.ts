@@ -11,7 +11,7 @@
  */
 
 import { test, expect } from "@playwright/test";
-import { db, outboxFor, latestDonationFor, deliveriesFor, setClock } from "../helpers/db";
+import { db, outboxFor, latestDonationFor, deliveriesFor, setClock, tick } from "../helpers/db";
 import { donateViaMock } from "../helpers/flows";
 import * as path from "node:path";
 
@@ -84,9 +84,7 @@ test("02 — donate qty 1 INR no tip, photo delivery sequence", async ({ page, r
     const advancedTime = new Date(scheduledAt.getTime() + 60_000); // +1 min
     await setClock(request, advancedTime.toISOString());
 
-    // Tick the cron
-    const { default: tickHelper } = await import("../helpers/db");
-    const { tick } = await import("../helpers/db");
+    // Tick the cron (tick already imported at top of file)
     await tick(request);
 
     // Assert delivery status = sent
