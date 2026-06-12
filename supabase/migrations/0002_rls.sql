@@ -113,16 +113,23 @@ create or replace view public_kitchens as
   select id, name, city, country_code from kitchens where enabled;
 grant select on public_kitchens to anon, authenticated;
 
--- ── storage policies ──────────────────────────────────────────────────────
--- photos bucket: kitchens upload into their own folder; admin reads; donors get
--- short-lived signed URLs minted server-side (service role) — no direct policy.
-create policy storage_photos_kitchen_insert on storage.objects for insert
-  with check (
-    bucket_id = 'photos'
-    and app_role() = 'kitchen'
-    and (storage.foldername(name))[1] = app_kitchen_id()::text
-  );
-create policy storage_photos_admin_read on storage.objects for select
-  using (bucket_id = 'photos' and app_role() = 'admin');
-create policy storage_receipts_admin_read on storage.objects for select
-  using (bucket_id = 'receipts' and app_role() = 'admin');
+-- ── storage policies (defense-in-depth only) ──────────────────────────────
+-- All storage I/O flows through the service role (uploads via API route, reads
+-- via server-minted signed URLs), so these client policies are belt-and-braces.
+-- On hosted Supabase the postgres role can't own storage.objects policies —
+-- skip gracefully there; they apply fully on local stacks.
+do $$
+begin
+  create policy storage_photos_kitchen_insert on storage.objects for insert
+    with check (
+      bucket_id = 'photos'
+      and app_role() = 'kitchen'
+      and (storage.foldername(name))[1] = app_kitchen_id()::text
+    );
+  create policy storage_photos_admin_read on storage.objects for select
+    using (bucket_id = 'photos' and app_role() = 'admin');
+  create policy storage_receipts_admin_read on storage.objects for select
+    using (bucket_id = 'receipts' and app_role() = 'admin');
+exception when insufficient_privilege then
+  raise notice 'storage.objects policies skipped (hosted Supabase): service-role-only access stands';
+end $$;

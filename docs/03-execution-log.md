@@ -18,3 +18,11 @@
 - **3.5 (sonnet agent):** kitchen portal complete (login, guarded upload, offline localStorage queue, dHash upload route w/ dup flagging). Typecheck clean.
 - **3.8-partial (Fable):** functions/ (onSchedule every-minute tick + daily, asia-south1, APP_CRON_SECRET), firebase.json, .firebaserc, apphosting.yaml (secrets via Secret Manager refs).
 - **Deviation noted:** brief's "SSE or WebSocket" for live counter → implemented SSE (+ polling fallback). React-email package installed but baseline emails ship from lib/email/render.ts (inline-CSS tables — deliberate: bulletproof email-client compat); can be elevated later without contract changes.
+
+## The Docker incident + cloud pivot (same day, evening)
+- Docker Desktop on Adam's machine is wedged: exe launches → pings backend pipes → exits silently; com.docker.service stopped, Start-Service denied (elevation), elevated launch ALSO silent-exits, zero event-log entries, WSL 2.6.3 healthy but zero distros, **PendingFileRenameOperations=True** → a half-finished update is the prime suspect. Fix = reboot (deferred by founder choice).
+- **Pivot:** Adam created cloud project `htcmvczrrabikzvaatfo` + supplied new-format API keys (sb_publishable_/sb_secret_). Supabase MCP server added to .mcp.json but tools not available mid-session → wrote `scripts/apply-sql.mjs` (pg client, `_sql_applied` ledger, per-file transactions) instead.
+- DB password recovered from founder's 4 candidates via single-host targeted probe (direct IPv6 host reachable on this network — no pooler needed). Probe scripts deleted after success (contained password material). `SUPABASE_DB_URL` lives only in gitignored .env.local.
+- **Cloud-compat fix:** 0002 storage.objects policies wrapped in DO/EXCEPTION (insufficient_privilege ⇒ NOTICE skip) — hosted postgres role can't own storage policies; all storage I/O is service-role anyway (uploads via API route, reads via signed URLs), so client policies are defense-in-depth.
+- Applied 0001+0002+0003+seed to cloud: **4/4 ok first pass** (incl. auth.users bcrypt seed). seed-images: 12/12 uploaded. `/api/health`: all green. Landing SSR: hero caption "Fed by …" served from the seeded delivered chain.
+- supabase/agent-skills installed at Adam's request. `pg` added as devDependency (cloud SQL application).
