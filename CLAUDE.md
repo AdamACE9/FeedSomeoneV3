@@ -86,8 +86,9 @@ session limits are tight. Commit after every stage.
 - [x] Phase 0 — stack locked, repo prepped (.gitignore, docs/00)
 - [x] Phase 1 — research: fleet hit session limit; salvaged as Verification TODOs (plan §13). V-1…V-5 pending, run cheaply pre-stage.
 - [x] Phase 2 — master plan written + self-reviewed → docs/02-master-plan.md
-- [ ] **GATE: Adam's permission to execute** ← YOU ARE HERE
-- [ ] 3.0 scaffold · [ ] 3.1 supabase+schema · [ ] 3.2 core libs · [ ] 3.3 checkout/webhook/cron
-- [ ] 3.4 donor UI · [ ] 3.5 kitchen · [ ] 3.6 admin · [ ] 3.7 emails/pdf/qr · [ ] 3.8 scripts/deploy · [ ] 3.9 polish
+- [x] GATE: Adam approved full execution
+- [x] 3.0 scaffold (Next 16.2.9 · Tailwind 4.3 · sharp 0.35) · [x] 3.1 schema+RLS+seed written (**DB boot blocked: Docker Desktop service needs Adam's manual click**) · [x] 3.2 core libs · [x] 3.3 checkout/webhook/cron + mock checkout
+- [x] 3.4 donor UI (landing, donate, thanks+anticipation, kitchens — Fable-built) · [x] 3.5 kitchen portal · [~] 3.6 admin (agent running) · [~] portal+PDF (agent running) · [x] 3.7-partial (emails in lib/email/render.ts, seed-images.mjs) · [~] 3.8 firebase cron configs done; bash scripts pending V-3 facts
+- [ ] DB up → db reset → typegen → dev server smoke
 - [ ] Phase 4 — test suite green → docs/04-test-report.md
 - Day 2 (when Stripe keys arrive): `stripe-init.sh`, flip `PAYMENT_PROVIDER=stripe`, smoke test.

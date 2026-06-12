@@ -1,0 +1,12 @@
+{
+  "name": "feedsomeone-cron",
+  "private": true,
+  "description": "FeedSomeone production schedulers — thin HTTPS pingers to the app's cron routes",
+  "main": "index.js",
+  "engines": {
+    "node": "20"
+  },
+  "dependencies": {
+    "firebase-functions": "^6.0.0"
+  }
+}
