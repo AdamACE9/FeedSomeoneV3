@@ -10,7 +10,7 @@
  */
 
 import { test, expect } from "@playwright/test";
-import { db, setClock } from "../helpers/db";
+import { resetAdminAuth, setClock } from "../helpers/db";
 import * as path from "node:path";
 
 const ADMIN_EMAIL = "admin@feedsomeone.com";
@@ -18,62 +18,40 @@ const ORIGINAL_PASSWORD = "Admin@123";
 const NEW_PASSWORD = "Admin@1234";
 
 test.beforeAll(async ({ request }) => {
+  // Deterministic starting point every run: Admin@123 + must_change_password=true.
+  await resetAdminAuth();
   await setClock(request, null).catch(() => {});
 });
 
 test.afterAll(async ({ request }) => {
-  // Restore must_change_password so subsequent test runs trigger the flow again
-  await db()
-    .from("profiles")
-    .update({ must_change_password: true })
-    .eq("user_id", "11111111-1111-1111-1111-111111111111");
   await setClock(request, null).catch(() => {});
 });
 
-async function tryAdminLogin(page: import("@playwright/test").Page): Promise<boolean> {
+test("15 — admin login, forced pw change, dashboard stat cards, bottom nav", async ({ page }) => {
+  // ── Login with the seeded password ─────────────────────────────────────────
   await page.goto("/admin/login");
   await page.waitForLoadState("networkidle");
-
-  // Try original password first
   await page.locator("#email").fill(ADMIN_EMAIL);
   await page.locator("#password").fill(ORIGINAL_PASSWORD);
   await page.getByRole("button", { name: "Sign in" }).click();
 
-  // Check for success (redirect) or error
-  await page.waitForURL((u) => !u.pathname.endsWith("/admin/login"), { timeout: 15000 }).catch(() => {});
+  // must_change_password=true → login lands on the forced-change page. Wait for
+  // it to SETTLE there (avoids racing the transient /admin redirect hop).
+  await page.waitForURL(/\/admin\/password/, { timeout: 20000 });
 
-  if (page.url().includes("/admin/login")) {
-    // Original password failed — try new password
-    await page.locator("#email").fill(ADMIN_EMAIL);
-    await page.locator("#password").fill(NEW_PASSWORD);
-    await page.getByRole("button", { name: "Sign in" }).click();
-    await page.waitForURL((u) => !u.pathname.endsWith("/admin/login"), { timeout: 15000 }).catch(() => {});
-    return false; // skipped password change flow
-  }
-  return true; // need to change password
-}
+  // ── Forced password change ─────────────────────────────────────────────────
+  await expect(page.getByText("Set a new password")).toBeVisible();
+  await page.screenshot({
+    path: path.join("tests", "evidence", "15-admin-pw-change.png"),
+    fullPage: false,
+  });
+  const pwInputs = page.locator('input[type="password"]');
+  await pwInputs.first().fill(NEW_PASSWORD);
+  await pwInputs.last().fill(NEW_PASSWORD);
+  await page.getByRole("button", { name: "Set password" }).click();
 
-test("15 — admin login, forced pw change, dashboard stat cards, bottom nav", async ({ page }) => {
-  const needsPasswordChange = await tryAdminLogin(page);
-
-  // ── Forced password change page ───────────────────────────────────────────
-  if (needsPasswordChange && page.url().includes("/admin/password")) {
-    await expect(page.getByText("Set a new password")).toBeVisible();
-
-    await page.screenshot({
-      path: path.join("tests", "evidence", "15-admin-pw-change.png"),
-      fullPage: false,
-    });
-
-    // Fill new password
-    const pwInputs = page.locator('input[type="password"]');
-    await pwInputs.first().fill(NEW_PASSWORD);
-    await pwInputs.last().fill(NEW_PASSWORD);
-    await page.getByRole("button", { name: "Set password" }).click();
-
-    // Should redirect to /admin dashboard
-    await page.waitForURL(/\/admin$/);
-  }
+  // Flag now cleared by adminChangePasswordAction → dashboard.
+  await page.waitForURL(/\/admin$/, { timeout: 20000 });
 
   // ── Dashboard ─────────────────────────────────────────────────────────────
   await expect(page.url()).toMatch(/\/admin/);

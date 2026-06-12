@@ -127,17 +127,34 @@ export async function latestDonationFor(email: string): Promise<Record<string, u
   return data as Record<string, unknown> | null;
 }
 
-/** All deliveries for a donation (all days). */
+/** All deliveries for a donation (all days), sorted by day_index. */
 export async function deliveriesFor(
   donationId: string,
 ): Promise<Array<Record<string, unknown>>> {
+  // NOTE: ordering by an embedded column via PostgREST is unreliable here
+  // ("column ...day_index does not exist"); fetch day_index and sort in JS.
   const { data, error } = await db()
     .from("deliveries")
-    .select("*, donation_days!inner(donation_id)")
-    .eq("donation_days.donation_id", donationId)
-    .order("donation_days(day_index)", { ascending: true });
+    .select("*, donation_days!inner(donation_id, day_index)")
+    .eq("donation_days.donation_id", donationId);
   if (error) throw new Error(`deliveriesFor: ${error.message}`);
-  return (data ?? []) as Array<Record<string, unknown>>;
+  const rows = (data ?? []) as Array<Record<string, unknown>>;
+  return rows.sort((a, b) => {
+    const ai = (a.donation_days as { day_index?: number } | null)?.day_index ?? 0;
+    const bi = (b.donation_days as { day_index?: number } | null)?.day_index ?? 0;
+    return ai - bi;
+  });
+}
+
+/**
+ * Deterministically reset the seed admin so test 15 starts from a known state on
+ * any run: password = Admin@123 (GoTrue-valid) and must_change_password = true.
+ * Uses the service-role admin API (the raw-SQL seed hash isn't GoTrue-valid).
+ */
+export async function resetAdminAuth(): Promise<void> {
+  const ADMIN_UUID = "11111111-1111-1111-1111-111111111111";
+  await db().auth.admin.updateUserById(ADMIN_UUID, { password: "Admin@123", email_confirm: true });
+  await db().from("profiles").update({ must_change_password: true }).eq("user_id", ADMIN_UUID);
 }
 
 /** All photos with a given status. */

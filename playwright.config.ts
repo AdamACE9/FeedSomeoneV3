@@ -18,7 +18,9 @@ export default defineConfig({
   testDir: "./tests/e2e",
   fullyParallel: false,
   workers: 1,
-  timeout: 60_000,
+  // Cloud Supabase (ap-south-1) adds latency to every round-trip; multi-step
+  // time-travel specs (streak ×3 donations, recurring, scheduled) need headroom.
+  timeout: 150_000,
   retries: 0,
   reporter: [["html", { open: "never" }], ["list"]],
 

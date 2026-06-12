@@ -122,3 +122,4 @@ it's not needed.
  POST /api/test/clock 200 in 272ms (next.js: 3ms, application-code: 269ms)
 ✓ Compiled in 164ms
 ✓ Compiled in 115ms
+[?25h
