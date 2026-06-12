@@ -1,5 +1,4 @@
 import { redirect } from "next/navigation";
-import { headers } from "next/headers";
 import { currentUser } from "@/lib/supabase/server";
 import AdminShell from "./AdminShell";
 
@@ -7,13 +6,12 @@ export default async function AdminAppLayout({ children }: { children: React.Rea
   const user = await currentUser();
   if (!user || user.role !== "admin") redirect("/admin/login");
 
-  // Force password change gate — if flag is set redirect to /admin/password
+  // The password page lives OUTSIDE the (app) group at /admin/password.
+  // The (app) layout enforces the gate: if the flag is set, redirect every time.
+  // The password page itself calls adminChangePasswordAction which clears the flag,
+  // so after changing password the next request to any (app) page succeeds.
   if (user.mustChangePassword) {
-    const hdrs = await headers();
-    const path = hdrs.get("x-next-pathname") ?? "";
-    if (!path.startsWith("/admin/password")) {
-      redirect("/admin/password");
-    }
+    redirect("/admin/password");
   }
 
   return <AdminShell email={user.email}>{children}</AdminShell>;
