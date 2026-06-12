@@ -88,9 +88,11 @@ session limits are tight. Commit after every stage.
 - [x] Phase 2 — master plan written + self-reviewed → docs/02-master-plan.md
 - [x] GATE: Adam approved full execution
 - [x] 3.0 scaffold (Next 16.2.9 · Tailwind 4.3 · sharp 0.35) · [x] 3.1 schema+RLS+seed written (**DB boot blocked: Docker Desktop service needs Adam's manual click**) · [x] 3.2 core libs · [x] 3.3 checkout/webhook/cron + mock checkout
-- [x] 3.4 donor UI (Fable) · [x] 3.5 kitchen portal · [x] 3.6 admin (32 files) · [x] donor portal + PDF receipts · [x] 3.7 emails/blur/qr/seed-images · [~] 3.8 firebase configs done, bash-scripts agent running
+- [x] 3.4 donor UI (Fable) · [x] 3.5 kitchen portal · [x] 3.6 admin (32 files) · [x] donor portal + PDF receipts · [x] 3.7 emails/blur/qr/seed-images · [x] 3.8 firebase configs + bash bootstrap scripts + README
 - [x] **PRODUCTION BUILD PASSES** (all 35+ routes compile)
-- [~] Playwright suite being written (agent); Chromium installed
-- [ ] **BLOCKED ON: Docker Desktop click (Adam)** → then: supabase start → db reset → seed-images → typegen → dev smoke
-- [ ] Phase 4 — run suite green + agent browser passes → docs/04-test-report.md
+- [x] **CLOUD DB LIVE** — Supabase `htcmvczrrabikzvaatfo` (ap-south-1): schema+RLS+seed applied, 12 seed images, `/api/health` green. (`.env.local` points here; local Docker path unchanged for later.)
+- [x] **PHASE 4 — 20/20 PLAYWRIGHT GREEN** against cloud → [docs/04-test-report.md](docs/04-test-report.md). Caught+fixed 3 real bugs (admin pw-change trap, jsonb-NOT-NULL clock leak, dup_of column).
+- Run tests: `node scripts/fix-auth.mjs` (repair seed logins on cloud) then `npm run test:e2e`.
+- **Still local-blocked:** Docker Desktop wedged (Windows `PendingFileRenameOperations` → needs a reboot). Not required — everything runs on cloud now. After reboot, `npm run setup` boots the local stack.
+- **Remaining (optional next pass):** deploy via `scripts/firebase-init.sh`+`deploy.sh` (needs Adam's Firebase login + Blaze click); dedicated specs for classroom / 3G-offline / blur / force-send (features built, not yet E2E-automated). Day-2 Stripe: `scripts/stripe-init.sh` + flip `PAYMENT_PROVIDER=stripe`.
 - Day 2 (when Stripe keys arrive): `stripe-init.sh`, flip `PAYMENT_PROVIDER=stripe`, smoke test.

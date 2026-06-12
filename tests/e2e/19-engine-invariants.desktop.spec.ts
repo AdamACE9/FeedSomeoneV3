@@ -33,24 +33,13 @@ test("19-A — duplicate photo_assignment violates unique constraint (23505)", a
 
   // First, ensure we have a donation_day to reference
   // Insert a minimal donor (test-only)
+  // Upsert so a donor left over from a prior run doesn't break the insert path.
   const { data: donor } = await db()
     .from("donors")
-    .insert({ email: "test19-constraint@feedsomeone.test", currency: "INR" })
+    .upsert({ email: "test19-constraint@feedsomeone.test", currency: "INR" }, { onConflict: "email" })
     .select("id")
-    .maybeSingle();
-
-  if (!donor) {
-    // Donor may exist from prior run — fetch it
-    const { data: existing } = await db()
-      .from("donors")
-      .select("id")
-      .eq("email", "test19-constraint@feedsomeone.test")
-      .maybeSingle();
-    if (!existing) {
-      throw new Error("Could not create or find test donor for invariant test");
-    }
-    Object.assign(donor!, existing);
-  }
+    .single();
+  expect(donor).not.toBeNull();
 
   // Create a minimal donation + day for referencing
   const { data: donation } = await db()
@@ -85,29 +74,11 @@ test("19-A — duplicate photo_assignment violates unique constraint (23505)", a
     .maybeSingle();
   expect(day).not.toBeNull();
 
-  // First insert — may succeed or may fail if this photo is already assigned
-  // We'll try to insert, then insert again for the constraint test
-  // Use a unique photo that is NOT already assigned — use pool photo but check
-  // Get a photo that is 'available'
-  const { data: availPhoto } = await db()
-    .from("photos")
-    .select("id")
-    .eq("status", "available")
-    .limit(1)
-    .maybeSingle();
-
-  if (!availPhoto) {
-    // Pool might be empty from prior tests — skip constraint sub-test
-    // but still pass (we've shown the test ran)
-    console.log("19-A: no available photo found; constraint test skipped (pool empty)");
-    return;
-  }
-
-  // Attempt first insert (set photo to assigned first)
-  await db()
-    .from("photos")
-    .update({ status: "assigned" })
-    .eq("id", availPhoto.id as string);
+  // Deterministic: use the known seed pool photo; clear any prior assignment and
+  // free it so the uniqueness constraint always gets exercised (no pool-empty skip).
+  await db().from("photo_assignments").delete().eq("photo_id", photoId);
+  await db().from("photos").update({ status: "assigned" }).eq("id", photoId);
+  const availPhoto = { id: photoId };
 
   const { error: firstErr } = await db().from("photo_assignments").insert({
     photo_id: availPhoto.id,
