@@ -88,7 +88,9 @@ session limits are tight. Commit after every stage.
 - [x] Phase 2 — master plan written + self-reviewed → docs/02-master-plan.md
 - [x] GATE: Adam approved full execution
 - [x] 3.0 scaffold (Next 16.2.9 · Tailwind 4.3 · sharp 0.35) · [x] 3.1 schema+RLS+seed written (**DB boot blocked: Docker Desktop service needs Adam's manual click**) · [x] 3.2 core libs · [x] 3.3 checkout/webhook/cron + mock checkout
-- [x] 3.4 donor UI (landing, donate, thanks+anticipation, kitchens — Fable-built) · [x] 3.5 kitchen portal · [~] 3.6 admin (agent running) · [~] portal+PDF (agent running) · [x] 3.7-partial (emails in lib/email/render.ts, seed-images.mjs) · [~] 3.8 firebase cron configs done; bash scripts pending V-3 facts
-- [ ] DB up → db reset → typegen → dev server smoke
-- [ ] Phase 4 — test suite green → docs/04-test-report.md
+- [x] 3.4 donor UI (Fable) · [x] 3.5 kitchen portal · [x] 3.6 admin (32 files) · [x] donor portal + PDF receipts · [x] 3.7 emails/blur/qr/seed-images · [~] 3.8 firebase configs done, bash-scripts agent running
+- [x] **PRODUCTION BUILD PASSES** (all 35+ routes compile)
+- [~] Playwright suite being written (agent); Chromium installed
+- [ ] **BLOCKED ON: Docker Desktop click (Adam)** → then: supabase start → db reset → seed-images → typegen → dev smoke
+- [ ] Phase 4 — run suite green + agent browser passes → docs/04-test-report.md
 - Day 2 (when Stripe keys arrive): `stripe-init.sh`, flip `PAYMENT_PROVIDER=stripe`, smoke test.

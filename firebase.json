@@ -5,5 +5,10 @@
       "codebase": "cron",
       "runtime": "nodejs20"
     }
+  ],
+  "apphosting": [
+    {
+      "backendId": "feedsomeone"
+    }
   ]
 }

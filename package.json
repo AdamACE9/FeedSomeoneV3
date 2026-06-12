@@ -14,31 +14,32 @@
     "test:e2e": "playwright test"
   },
   "dependencies": {
-    "next": "16.2.9",
-    "react": "^19.2",
-    "react-dom": "^19.2",
-    "@supabase/supabase-js": "^2",
-    "@supabase/ssr": "latest",
-    "sharp": "^0.35",
-    "date-fns": "^4",
-    "date-fns-tz": "latest",
-    "stripe": "latest",
-    "resend": "latest",
     "@react-email/components": "latest",
     "@react-email/render": "latest",
+    "@supabase/ssr": "latest",
+    "@supabase/supabase-js": "^2",
+    "date-fns": "^4",
+    "date-fns-tz": "latest",
+    "next": "16.2.9",
     "pdf-lib": "latest",
     "qrcode": "latest",
+    "react": "^19.2",
+    "react-dom": "^19.2",
+    "resend": "latest",
+    "sharp": "^0.35",
+    "stripe": "latest",
     "zod": "latest"
   },
   "devDependencies": {
-    "typescript": "^5",
+    "@playwright/test": "latest",
+    "@tailwindcss/postcss": "^4",
     "@types/node": "latest",
+    "@types/qrcode": "latest",
     "@types/react": "latest",
     "@types/react-dom": "latest",
-    "@types/qrcode": "latest",
-    "tailwindcss": "^4",
-    "@tailwindcss/postcss": "^4",
     "postcss": "latest",
-    "@playwright/test": "latest"
+    "supabase": "^2.106.0",
+    "tailwindcss": "^4",
+    "typescript": "^5"
   }
 }
