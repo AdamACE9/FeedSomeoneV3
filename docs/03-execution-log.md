@@ -38,3 +38,13 @@
 - `scripts/fix-auth.mjs` added (raw-SQL `auth.users` hashes aren't GoTrue-valid; repairs admin+kitchen logins) and wired into `supabase-init.sh --cloud`.
 - **One PowerShell gotcha logged:** `Set-Content -Encoding utf8` (PS 5.1) double-encoded UTF-8 (em-dash/₹/→ → mojibake) when bulk-editing tests; reverted via git and redid edits with a Node script (`fs.writeFileSync utf8`). Lesson: never bulk-edit UTF-8 source with PS 5.1 `Set-Content`.
 - Full report → [04-test-report.md](04-test-report.md).
+
+## Phase 5 — cinematic donor-site redesign (2026-06-13)
+- Adam: "make the website awesome that I come and say ...WHAT!?" + donating quick/simple. Direction: bold & cinematic, all four levers + more. Built by Fable directly (taste-critical), verified on-screen via chrome-devtools MCP.
+- **Design layer** (`globals.css`): filmic grain overlay, `.print` film-frame (paper border + grain + inner vignette + timestamp tab + hover-lift + tilt), warm hero `.stage`, scroll-`reveal`, kinetic keyframes (ken-burns, float, CTA sheen, scroll-cue), `display` type util.
+- **Landing**: full-bleed hero with a floating "JUST DELIVERED" print stack (hero photo ken-burns + 2 peeking prints), ticking `LocalClock` ("right now where you are"), film-print carousel, numbered editorial how-it-works (dropped emoji), pull-quote stats band with marigold glow. All locked-spec anchors preserved.
+- **QuickDonate** sheet (3-tap fast lane off the hero CTA: amount chips → email → pay, +25% tip pre-checked per spec) posting to the same `/api/checkout`. `HeroCTA` stays a real `<a href="/donate">` (no-JS + E2E) that opens the sheet. `LocalPrice` resolves hero price to the visitor's currency (tz hint) so hero == sheet.
+- **Seed images** regenerated: warm grain-textured atmospheric light-fields (no more "SAMPLE PLATE №12" clock gradients) — re-uploaded to cloud Storage.
+- **/donate**, **/thanks**, **/portal** brought into the same world (stage/grain, bigger type, print gallery, anticipation beat) — every tested selector/anchor untouched.
+- Verified end-to-end in-browser: donate → mock-pay → paid → receipt FS-20260613-0008 → cinematic /thanks. **Full E2E suite re-run: 20/20 green.** One Next warning fixed (`data-scroll-behavior="smooth"` on `<html>`).
+- New currency nuance confirmed: on localhost (no geo header) the server falls back to USD, but the client refines to the browser-tz currency — for Adam (Asia/Dubai) the whole donor flow shows **AED** consistently.
