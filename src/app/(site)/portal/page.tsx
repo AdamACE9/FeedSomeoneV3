@@ -248,7 +248,7 @@ export default async function PortalPage() {
 
   /* ── render ───────────────────────────────────────────────────────────── */
   return (
-    <main className="min-h-screen bg-paper text-ink">
+    <main className="grain min-h-screen bg-paper text-ink">
       <div className="mx-auto max-w-4xl px-5 pt-8 pb-20">
         {/* ── nav ──────────────────────────────────────────────────────── */}
         <div className="flex items-center justify-between">
@@ -294,22 +294,20 @@ export default async function PortalPage() {
               </p>
             </div>
           ) : (
-            <div className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-4">
+            <div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-4">
               {gallery.map((ph) => (
-                <figure key={ph.assignId} className="group">
-                  <div className="border border-line bg-paper p-1.5 relative">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={ph.url}
-                      alt="A meal moment"
-                      className="block w-full aspect-square object-cover"
-                    />
+                <figure key={ph.assignId}>
+                  <div className="print print-hover">
+                    <div className="relative aspect-square overflow-hidden">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={ph.url} alt="A meal moment" />
+                    </div>
                   </div>
-                  <figcaption className="mt-1.5 space-y-0.5">
-                    <div className="timestamp text-ink/50 text-[10px] leading-tight">
+                  <figcaption className="mt-2 space-y-0.5 px-0.5">
+                    <div className="timestamp text-[10px] leading-tight text-ink/50">
                       {ph.takenLabel}
                     </div>
-                    <div className="text-[12px] text-ink/70 leading-tight">
+                    <div className="text-[12px] leading-tight text-ink/70">
                       {ph.kitchen}
                       {ph.city ? `, ${ph.city}` : ""}
                     </div>
