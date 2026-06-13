@@ -34,18 +34,20 @@ export default async function ThanksPage({ params }: { params: Promise<{ donatio
   const paid = d.status === "paid";
 
   return (
-    <main className="mx-auto max-w-xl px-5 py-10">
-      <Link href="/" className="timestamp text-ink/50 hover:text-clay min-h-[44px] inline-flex items-center">
-        ← FEEDSOMEONE
-      </Link>
+    <main className="grain stage min-h-screen">
+      <div className="mx-auto max-w-xl px-5 py-12">
+        <Link href="/" className="timestamp inline-flex min-h-[44px] items-center text-ink/50 hover:text-clay">
+          ← FEEDSOMEONE
+        </Link>
 
-      <h1 className="mt-4 font-[family-name:var(--font-fraunces)] font-black text-4xl sm:text-5xl tracking-tight leading-tight">
-        {paid ? (
-          <>You fed {countWords(qty)} {childWord}.</>
-        ) : (
-          <>Almost there…</>
-        )}
-      </h1>
+        {paid && <p className="timestamp mt-6 text-clay">A MEAL IS ON ITS WAY ·</p>}
+        <h1 className="mt-2 display text-[clamp(38px,8vw,66px)] leading-[0.92] tracking-[-0.02em]">
+          {paid ? (
+            <>You fed {countWords(qty)} {childWord}<span className="text-clay">.</span></>
+          ) : (
+            <>Almost there…</>
+          )}
+        </h1>
 
       {receipt?.number && (
         <p className="timestamp mt-3 text-ink/60">RECEIPT {receipt.number} · EMAILED TO {(d.donors as unknown as { email: string }).email.toUpperCase()}</p>
@@ -118,6 +120,7 @@ export default async function ThanksPage({ params }: { params: Promise<{ donatio
       <p className="timestamp mt-10 text-ink/40">
         TELL ONE PERSON. THAT'S HOW {qty === 1 ? "ONE CHILD" : `${qty} CHILDREN`} BECOMES A THOUSAND.
       </p>
+      </div>
     </main>
   );
 }
