@@ -3,10 +3,10 @@
 import { useEffect, useRef, useState } from "react";
 
 const STEPS = [
-  { icon: "₹", title: "You donate", body: "₹25. Twenty seconds. Receipt in your inbox before you lock your phone." },
-  { icon: "🍛", title: "A kitchen serves a hot meal", body: "A real partner kitchen cooks, serves a child, and photographs the moment — timestamp and all." },
-  { icon: "📷", title: "The photo reaches you at that exact minute", body: "Taken at 1:15 PM there, it lands at 1:15 PM your time. Mid-afternoon. While you're at work. That's the point." },
-  { icon: "🔁", title: "Schedule it", body: "Five children every day for a week. A child eats every day you do." },
+  { k: "01", title: "You donate", body: "Twenty seconds. A numbered receipt hits your inbox before you lock your phone." },
+  { k: "02", title: "A kitchen serves a hot meal", body: "A real partner kitchen cooks, serves a child, and photographs the moment — timestamp and all." },
+  { k: "03", title: "The photo reaches you at that exact minute", body: "Taken at 1:15 PM there, it lands at 1:15 PM your time. Mid-afternoon. While you're at work. That's the point." },
+  { k: "04", title: "Schedule it", body: "Five children every day for a week. A child eats every day you do." },
 ];
 
 /** Vertical timeline that draws itself as it scrolls into view. */
@@ -18,10 +18,7 @@ export default function HowItWorks() {
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
     setReduced(mq.matches);
-    if (mq.matches) {
-      setProgress(1);
-      return;
-    }
+    if (mq.matches) { setProgress(1); return; }
     const onScroll = () => {
       const el = ref.current;
       if (!el) return;
@@ -43,39 +40,40 @@ export default function HowItWorks() {
       { rootMargin: "20% 0px" },
     );
     if (ref.current) io.observe(ref.current);
-    return () => {
-      io.disconnect();
-      window.removeEventListener("scroll", onScroll);
-    };
+    return () => { io.disconnect(); window.removeEventListener("scroll", onScroll); };
   }, []);
 
   return (
     <div ref={ref} className="relative">
       {/* rail */}
-      <div className="absolute left-[19px] top-2 bottom-2 w-px bg-line" aria-hidden />
+      <div className="absolute left-[23px] top-3 bottom-3 w-px bg-line" aria-hidden />
       <div
-        className="absolute left-[19px] top-2 w-px bg-clay origin-top"
-        style={{ height: `calc(${Math.round(progress * 100)}% - 16px)`, transition: reduced ? "none" : "height 80ms linear" }}
+        className="absolute left-[23px] top-3 w-px origin-top bg-clay"
+        style={{ height: `calc(${Math.round(progress * 100)}% - 24px)`, transition: reduced ? "none" : "height 80ms linear" }}
         aria-hidden
       />
-      <ol className="space-y-10">
+      <ol className="space-y-11">
         {STEPS.map((s, i) => {
-          const visible = reduced || progress > (i + 0.35) / STEPS.length;
+          const active = reduced || progress > (i + 0.3) / STEPS.length;
           return (
             <li
               key={s.title}
-              className="relative pl-14"
+              className="relative pl-16"
               style={{
-                opacity: visible ? 1 : 0.25,
-                transform: visible ? "translateX(0)" : "translateX(10px)",
-                transition: reduced ? "none" : "opacity 420ms ease, transform 420ms ease",
+                opacity: active ? 1 : 0.4,
+                transform: active ? "translateX(0)" : "translateX(10px)",
+                transition: reduced ? "none" : "opacity 480ms ease, transform 480ms ease",
               }}
             >
-              <span className="absolute left-0 top-0 flex h-10 w-10 items-center justify-center border border-line bg-paper text-base" aria-hidden>
-                {s.icon}
+              <span
+                className="absolute left-0 top-0 flex h-12 w-12 items-center justify-center border bg-paper font-[family-name:var(--font-dm-mono)] text-sm font-medium transition-colors"
+                style={{ borderColor: active ? "var(--color-clay)" : "var(--color-line)", color: active ? "var(--color-clay)" : "var(--color-ink)" }}
+                aria-hidden
+              >
+                {s.k}
               </span>
-              <h3 className="font-[family-name:var(--font-fraunces)] font-black text-xl leading-snug">{s.title}</h3>
-              <p className="mt-1.5 text-[15px] leading-relaxed text-ink/70">{s.body}</p>
+              <h3 className="display text-[22px] leading-tight">{s.title}</h3>
+              <p className="mt-2 text-[15px] leading-relaxed text-ink/70">{s.body}</p>
             </li>
           );
         })}
