@@ -83,10 +83,10 @@ export default function QuickDonate({ initialCurrency }: { initialCurrency: Curr
 
   return (
     <div className="fixed inset-0 z-[70] flex items-end justify-center sm:items-center" role="dialog" aria-modal="true" aria-label="Feed a child">
-      <button aria-label="Close" onClick={() => setOpen(false)} className="absolute inset-0 bg-ink/55 backdrop-blur-[2px]" style={{ animation: "rise-in 240ms ease both" }} />
+      <button aria-label="Close" onClick={() => setOpen(false)} className="absolute inset-0 bg-ink/60" style={{ animation: "fade-in 220ms ease both" }} />
       <div
-        className="relative w-full max-w-md bg-paper border border-line shadow-2xl sm:rounded-none"
-        style={{ animation: "rise-in 360ms cubic-bezier(0.22,1,0.36,1) both" }}
+        className="relative w-full max-w-md border border-ink/15 bg-paper shadow-2xl"
+        style={{ animation: "sheet-in 320ms cubic-bezier(0.22,1,0.36,1) both" }}
       >
         <div className="flex items-start justify-between border-b border-line px-5 py-4">
           <div>
@@ -131,9 +131,8 @@ export default function QuickDonate({ initialCurrency }: { initialCurrency: Curr
 
           <button
             type="button" onClick={go} disabled={busy}
-            className="cta-sheen group w-full min-h-[58px] bg-clay text-paper text-lg font-bold transition-colors hover:bg-clay-deep disabled:opacity-60"
+            className="min-h-[58px] w-full bg-clay text-lg font-bold text-paper transition-colors hover:bg-ink disabled:opacity-60"
           >
-            <span className="sheen" aria-hidden />
             {busy ? "Opening secure checkout…" : `Feed ${qty === 1 ? "one child" : `${qty} children`} · ${formatMoney(total, currency)} →`}
           </button>
 

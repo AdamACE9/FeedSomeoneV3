@@ -20,7 +20,7 @@ export default async function DonatePage({
   const canceled = sp.canceled === "1";
 
   return (
-    <main className="grain stage min-h-screen">
+    <main className="min-h-screen bg-paper">
       <div className="mx-auto max-w-xl px-5 py-8 sm:py-12">
         <Link href="/" className="timestamp inline-flex min-h-[44px] items-center text-ink/50 hover:text-clay">
           ← FEEDSOMEONE
@@ -43,7 +43,7 @@ export default async function DonatePage({
             No charge happened. The plate's still waiting whenever you are.
           </p>
         )}
-        <div className="mt-7 border border-line bg-paper/80 p-5 shadow-[10px_14px_36px_-20px_rgba(33,21,17,0.4)] backdrop-blur-sm sm:p-7">
+        <div className="mt-7 border border-ink/12 bg-paper p-5 sm:p-7">
           <DonateForm initialCurrency={initialCurrency} initialQty={classroom ? 30 : qty} initialClassroom={classroom} qrSlug={qr} />
         </div>
       </div>

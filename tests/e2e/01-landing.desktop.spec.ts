@@ -42,9 +42,8 @@ test("01 — landing page loads with required sections and copy", async ({ page 
     page.locator("span").filter({ hasText: "100% goes to meals — zero admin fee." }).first(),
   ).toBeVisible();
 
-  // ── Team names ────────────────────────────────────────────────────────────
-  await expect(page.getByText("Danish Ahmed").first()).toBeVisible();
-  await expect(page.getByText("Adam Ahmed").first()).toBeVisible();
+  // ── Sign-off ────────────────────────────────────────────────────────────────
+  await expect(page.getByText("No one should eat alone").first()).toBeVisible();
 
   // ── Screenshot evidence ────────────────────────────────────────────────────
   await page.screenshot({

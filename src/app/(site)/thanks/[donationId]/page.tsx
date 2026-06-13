@@ -34,7 +34,7 @@ export default async function ThanksPage({ params }: { params: Promise<{ donatio
   const paid = d.status === "paid";
 
   return (
-    <main className="grain stage min-h-screen">
+    <main className="min-h-screen bg-paper">
       <div className="mx-auto max-w-xl px-5 py-12">
         <Link href="/" className="timestamp inline-flex min-h-[44px] items-center text-ink/50 hover:text-clay">
           ← FEEDSOMEONE

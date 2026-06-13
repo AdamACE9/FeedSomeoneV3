@@ -297,11 +297,9 @@ export default async function PortalPage() {
             <div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-4">
               {gallery.map((ph) => (
                 <figure key={ph.assignId}>
-                  <div className="print print-hover">
-                    <div className="relative aspect-square overflow-hidden">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={ph.url} alt="A meal moment" />
-                    </div>
+                  <div className="photo lift aspect-square border border-ink/12">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={ph.url} alt="A meal moment" />
                   </div>
                   <figcaption className="mt-2 space-y-0.5 px-0.5">
                     <div className="timestamp text-[10px] leading-tight text-ink/50">

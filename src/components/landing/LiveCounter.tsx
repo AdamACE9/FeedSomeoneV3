@@ -81,12 +81,12 @@ export default function LiveCounter({ initial }: { initial: number }) {
   }, [value]);
 
   return (
-    <span className="inline-flex items-center gap-2 border border-line bg-paper px-3.5 py-1.5 text-sm">
-      <span className="relative flex h-2 w-2">
+    <span className="timestamp inline-flex items-center gap-2 text-ink/55">
+      <span className="relative flex h-1.5 w-1.5">
         <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-leaf opacity-60 motion-reduce:hidden" />
-        <span className="relative inline-flex h-2 w-2 rounded-full bg-leaf" />
+        <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-leaf" />
       </span>
-      <span className="font-medium tabular-nums">
+      <span className="tabular-nums text-ink/75">
         {display.toLocaleString("en-IN")} {display === 1 ? "child" : "children"} fed today
       </span>
     </span>
