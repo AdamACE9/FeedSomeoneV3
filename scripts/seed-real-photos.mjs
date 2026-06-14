@@ -33,7 +33,7 @@ const MEALS = [
 async function processImage(file) {
   return sharp(readFileSync(resolve(SRC, file)))
     .rotate()
-    .resize(1000, 1250, { fit: "cover", position: "attention" })
+    .resize(1000, 1250, { fit: "cover", position: "centre" })
     .modulate({ saturation: 1.06, brightness: 1.02 })
     .sharpen({ sigma: 0.7 })
     .jpeg({ quality: 86, mozjpeg: true })
