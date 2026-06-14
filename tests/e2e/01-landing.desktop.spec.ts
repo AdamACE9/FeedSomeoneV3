@@ -18,10 +18,6 @@ test("01 — landing page loads with required sections and copy", async ({ page 
   // ── h1 ──────────────────────────────────────────────────────────────────
   await expect(page.getByRole("heading", { level: 1 })).toContainText("Feed one child");
 
-  // ── counter pill ─────────────────────────────────────────────────────────
-  // LiveCounter renders "N children fed today" inside a <span>
-  await expect(page.locator("span").filter({ hasText: /fed today/ }).first()).toBeVisible();
-
   // ── CTA link text ─────────────────────────────────────────────────────────
   // "Feed one child · ₹25 →"  (or USD equivalent but always contains "Feed one child")
   await expect(page.getByRole("link", { name: /Feed one child/ }).first()).toBeVisible();
@@ -35,7 +31,7 @@ test("01 — landing page loads with required sections and copy", async ({ page 
 
   // ── How-It-Works section ──────────────────────────────────────────────────
   await expect(page.locator("text=HOW IT WORKS")).toBeVisible();
-  await expect(page.getByText("Four steps. One real minute.")).toBeVisible();
+  await expect(page.getByText("What happens after you give.")).toBeVisible();
 
   // ── Stats band badge ──────────────────────────────────────────────────────
   await expect(

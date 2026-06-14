@@ -30,6 +30,7 @@
     "resend": "latest",
     "sharp": "^0.35",
     "stripe": "latest",
+    "three": "^0.184.0",
     "zod": "latest"
   },
   "devDependencies": {
@@ -39,6 +40,7 @@
     "@types/qrcode": "latest",
     "@types/react": "latest",
     "@types/react-dom": "latest",
+    "@types/three": "^0.184.1",
     "pg": "^8.21.0",
     "postcss": "latest",
     "supabase": "^2.106.0",

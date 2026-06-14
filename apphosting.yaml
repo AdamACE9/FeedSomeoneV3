@@ -51,7 +51,7 @@ env:
     availability: [RUNTIME]
 
   - variable: GEO_FALLBACK_CURRENCY
-    value: USD
+    value: INR # India-based charity — undetected visitors see the iconic ₹25
     availability: [RUNTIME]
 
   - variable: STATS_MIN_MEALS

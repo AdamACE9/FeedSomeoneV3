@@ -3,10 +3,9 @@ import { headers } from "next/headers";
 import { adminDb } from "@/lib/supabase/server";
 import { countryFromHeaders, resolveCurrency } from "@/lib/geo";
 import { fmtTime } from "@/lib/deliver";
-import LiveCounter from "@/components/landing/LiveCounter";
+import HeroCanvas from "@/components/landing/HeroCanvas";
 import HowItWorks from "@/components/landing/HowItWorks";
 import StatsBand from "@/components/landing/StatsBand";
-import LocalClock from "@/components/landing/LocalClock";
 import HeroCTA from "@/components/checkout/HeroCTA";
 import LocalPrice from "@/components/checkout/LocalPrice";
 import QuickDonate from "@/components/checkout/QuickDonate";
@@ -77,6 +76,10 @@ export default async function Landing() {
     <main className="bg-paper text-ink">
       <QuickDonate initialCurrency={currency} />
 
+      {/* ── hero stage — warm WebGL light behind masthead + hero ─────────── */}
+      <div className="relative isolate overflow-hidden">
+        <HeroCanvas className="pointer-events-none absolute inset-0 -z-10" />
+
       {/* ── masthead ─────────────────────────────────────────────────────── */}
       <header className="mx-auto max-w-6xl px-5 pt-5">
         <div className="flex items-end justify-between pb-3">
@@ -88,21 +91,15 @@ export default async function Landing() {
 
       {/* ── hero ─────────────────────────────────────────────────────────── */}
       <section className="mx-auto max-w-6xl px-5">
-        <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 py-3.5">
-          <LiveCounter initial={stats.fed_today} />
-          <span className="timestamp text-ink/45">Right now where you are · <LocalClock /></span>
-        </div>
-        <div className="hair" />
-
-        <div className="py-10 lg:py-16">
+        <div className="pt-9 pb-10 lg:pt-14 lg:pb-16">
           <h1 className="display text-[clamp(48px,11vw,122px)]">
             Feed one child<br /><span className="text-clay">right now.</span>
           </h1>
           <div className="mt-10 grid gap-y-10 lg:grid-cols-[1fr_0.82fr] lg:items-end lg:gap-x-14">
             <div>
             <p className="max-w-md text-[19px] leading-[1.5] text-ink/70">
-              A partner kitchen cooks it, serves a child, and photographs the moment.
-              The photo reaches your inbox — at the exact minute it was taken.
+              A kitchen near the child cooks a hot meal and takes a photo while they eat.
+              It reaches your inbox at the same time of day it happened.
             </p>
             <div className="mt-9 flex flex-wrap items-center gap-x-6 gap-y-3">
               <HeroCTA initialCurrency={currency} />
@@ -111,7 +108,7 @@ export default async function Landing() {
               </Link>
             </div>
             <p className="timestamp mt-5 text-ink/40">
-              <LocalPrice initialCurrency={currency} /> · one meal · one photo · no admin fee
+              <LocalPrice initialCurrency={currency} /> feeds one child. we keep nothing.
             </p>
           </div>
 
@@ -126,7 +123,7 @@ export default async function Landing() {
                   <span className="photo-stamp">{fmtTime(hero.takenAt, hero.tz)}</span>
                 </div>
                 <figcaption className="mt-3 flex items-baseline justify-between gap-3 text-[15px]">
-                  <span>Fed by <b>{hero.donorName}</b>{hero.city ? ` in ${hero.city}` : ""}</span>
+                  <span>{hero.city || "New Delhi"}</span>
                   <span className="timestamp text-ink/45">
                     {hero.takenAt.toLocaleDateString("en-GB", { day: "numeric", month: "short", timeZone: hero.tz })}
                   </span>
@@ -144,6 +141,7 @@ export default async function Landing() {
           </div>
         </div>
       </section>
+      </div>
 
       {/* ── recently fed ─────────────────────────────────────────────────── */}
       <section className="border-y border-ink/10 bg-sand/45 py-12">
@@ -163,8 +161,8 @@ export default async function Landing() {
                     <img src={p.url} alt="A meal moment" />
                     <span className="photo-stamp">{fmtTime(p.takenAt, p.tz)}</span>
                   </div>
-                  <figcaption className="mt-2.5 text-[14px]">
-                    <b>{p.donorName}</b>{p.city ? ` · ${p.city}` : ""}
+                  <figcaption className="mt-2.5 text-[14px] text-ink/65">
+                    {p.city || "New Delhi"}
                   </figcaption>
                 </figure>
               ))
@@ -177,20 +175,51 @@ export default async function Landing() {
         </div>
       </section>
 
+      {/* ── the why — india child hunger ────────────────────────────────── */}
+      <section className="border-t border-ink/10 py-24 sm:py-28">
+        <div className="mx-auto max-w-6xl px-5">
+          <div className="max-w-3xl">
+            <p className="timestamp text-clay">Why we do this · India</p>
+            <h2 className="mt-3 display text-[clamp(34px,6vw,64px)]">Most of the world&apos;s hungry children are here.</h2>
+            <p className="mt-6 max-w-xl text-[18px] leading-[1.55] text-ink/70">
+              India has more underfed children than any country in the world. There is enough food.
+              It just doesn&apos;t reach them. ₹25 puts a hot meal in front of one of them today.
+            </p>
+          </div>
+          <div className="mt-14 grid gap-x-10 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              { n: "1 in 3", t: "children under five are stunted from chronic hunger", s: "NFHS-5, 2021" },
+              { n: "20M", t: "are severely malnourished, nearly half the world's total", s: "UNICEF, 2024" },
+              { n: "67%", t: "of young children are anaemic", s: "NFHS-5, 2021" },
+              { n: "102/123", t: "on the 2025 Global Hunger Index, rated serious", s: "GHI, 2025" },
+            ].map((x) => (
+              <div key={x.n}>
+                <div className="display text-[clamp(40px,6.5vw,68px)] leading-none text-clay">{x.n}</div>
+                <p className="mt-3.5 text-[15px] leading-snug text-ink/70">{x.t}</p>
+                <p className="timestamp mt-2 text-ink/35">{x.s}</p>
+              </div>
+            ))}
+          </div>
+          <p className="mt-16 max-w-2xl display text-[clamp(24px,4vw,42px)] leading-[1.05]">
+            <span className="text-clay">&#8377;25</span> buys one child a hot meal. That&apos;s all this is.
+          </p>
+        </div>
+      </section>
+
       {/* ── what lands in your inbox ─────────────────────────────────────── */}
       {hero && (
         <section className="mx-auto max-w-6xl px-5 py-24 sm:py-28">
           <div className="grid items-center gap-y-12 lg:grid-cols-[0.95fr_1.05fr] lg:gap-x-16">
             <div className="lg:order-2">
-              <p className="timestamp text-clay">What lands in your inbox</p>
-              <h2 className="mt-3 display text-[clamp(32px,5.5vw,60px)]">Not a thank-you note.<br />The actual moment.</h2>
+              <p className="timestamp text-clay">What you get back</p>
+              <h2 className="mt-3 display text-[clamp(32px,5.5vw,60px)]">You see the meal happen.</h2>
               <p className="mt-6 max-w-md text-[18px] leading-[1.55] text-ink/70">
-                Mid-afternoon, while you&apos;re at your desk, an email arrives. One photo —
-                the child you fed, the plate in their hands, the kitchen behind them,
-                stamped with the exact minute it happened. You see who, what, where, and when.
+                A few hours after you give, an email arrives. It is one photo: the child
+                eating the meal you paid for, at the kitchen, sent at the same time of day
+                it was taken. No newsletter, no annual report. Just the moment.
               </p>
               <dl className="mt-8 grid grid-cols-2 gap-x-6 gap-y-5 max-w-md">
-                {[["Who you fed", "A real child, by name of kitchen"], ["What they ate", "A hot plate — dal, rice, chapati"], ["Where", "The verified partner kitchen"], ["When", "The exact minute, your timezone"]].map(([t, b]) => (
+                {[["Who", "The child who ate"], ["What", "A hot plate of dal, rice and roti"], ["Where", "The kitchen we work with"], ["When", "The minute it happened, your time"]].map(([t, b]) => (
                   <div key={t}>
                     <dt className="timestamp text-ink/40">{t}</dt>
                     <dd className="mt-1 text-[14px] leading-snug text-ink/70">{b}</dd>
@@ -208,11 +237,11 @@ export default async function Landing() {
                   <span className="photo-stamp">{fmtTime(hero.takenAt, hero.tz)}</span>
                 </div>
                 <figcaption className="px-1 pt-3.5 pb-1">
-                  <div className="text-[15px] leading-tight">Fed by <b>{hero.donorName}</b></div>
-                  <div className="timestamp mt-1 text-ink/45">{hero.city || "New Delhi"} · a meal you paid for</div>
+                  <div className="text-[15px] leading-tight">A meal you paid for</div>
+                  <div className="timestamp mt-1 text-ink/45">{hero.city || "New Delhi"}</div>
                 </figcaption>
               </div>
-              <p className="timestamp mt-4 text-center text-ink/40">delivered at {fmtTime(hero.takenAt, hero.tz)} — the same minute it was taken</p>
+              <p className="timestamp mt-4 text-center text-ink/40">sent at {fmtTime(hero.takenAt, hero.tz)}, the same time of day it happened</p>
             </figure>
           </div>
         </section>
@@ -223,7 +252,7 @@ export default async function Landing() {
         <div className="grid gap-y-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-x-16">
           <div>
             <p className="timestamp text-clay">HOW IT WORKS</p>
-            <h2 className="mt-3 display text-[clamp(34px,6vw,68px)]">Four steps. One real minute.</h2>
+            <h2 className="mt-3 display text-[clamp(34px,6vw,68px)]">What happens after you give.</h2>
           </div>
           <div className="max-w-xl lg:pt-2"><HowItWorks /></div>
         </div>
@@ -244,11 +273,11 @@ export default async function Landing() {
         <div className="grid items-center gap-y-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-x-16">
           <div>
             <p className="timestamp text-clay">Since 2014</p>
-            <h2 className="mt-3 display text-[clamp(38px,7vw,80px)]">This isn&apos;t new.<br />It&apos;s a return.</h2>
+            <h2 className="mt-3 display text-[clamp(38px,7vw,80px)]">We&apos;ve done<br />this before.</h2>
             <p className="mt-7 max-w-md text-[18px] leading-[1.55] text-ink/70">
-              FeedSomeone served <b className="text-ink">eighteen million meals</b> to children across India —
-              then paused in 2018. A decade of proof. Today it&apos;s back, rebuilt from nothing for 2026:
-              every meal geo-verified, timestamped, and photographed to the minute.
+              Between 2014 and 2018, FeedSomeone served <b className="text-ink">eighteen million meals</b> to
+              children across India. Then it stopped. We&apos;ve rebuilt it from scratch for 2026, with the
+              proof of every meal built into how it works.
             </p>
           </div>
           <div className="lg:text-right">
@@ -263,14 +292,14 @@ export default async function Landing() {
         <div className="mx-auto max-w-6xl px-5">
           <div className="max-w-3xl">
             <p className="timestamp text-clay">How we keep it honest</p>
-            <h2 className="mt-3 display text-[clamp(32px,5.5vw,60px)]">Every meal is verified. Fraud stays near zero.</h2>
+            <h2 className="mt-3 display text-[clamp(32px,5.5vw,60px)]">We check every meal that goes out.</h2>
           </div>
           <div className="mt-14 grid gap-x-10 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
             {[
-              { k: "01", t: "Geo-fenced kitchens", b: "Every photo is checked against the kitchen's registered GPS. A meal can only be logged where it is actually served." },
-              { k: "02", t: "Timestamped to the minute", b: "Each photo carries the exact moment it was taken — the same minute it lands in your inbox. Time can't be faked." },
-              { k: "03", t: "Privacy-first faces", b: "Face detection protects every child — one tap blurs identities, and duplicate-photo detection flags any reuse." },
-              { k: "04", t: "Numbered receipts", b: "Every donation gets a sequential, dated FS-receipt. 100% goes to meals — the books are open by design." },
+              { k: "01", t: "Kitchen GPS", b: "Every photo is checked against the kitchen's location, so a meal can only be logged where it was actually served." },
+              { k: "02", t: "Timestamps", b: "Each photo carries the moment it was taken, the same minute it reaches you. That is hard to fake." },
+              { k: "03", t: "Privacy first", b: "We can blur a child's face in one tap, and we flag any photo that has been used before." },
+              { k: "04", t: "Numbered receipts", b: "Every donation gets a numbered, dated receipt. All of it goes to meals. Nothing goes to us." },
             ].map((p) => (
               <div key={p.k}>
                 <div className="timestamp text-ink/30">{p.k}</div>

@@ -3,10 +3,10 @@
 import { useEffect, useRef, useState } from "react";
 
 const STEPS = [
-  { k: "01", title: "You donate", body: "Twenty seconds. A numbered receipt hits your inbox before you lock your phone." },
-  { k: "02", title: "A kitchen serves a hot meal", body: "A real partner kitchen cooks, serves a child, and photographs the moment — timestamp and all." },
-  { k: "03", title: "The photo reaches you at that exact minute", body: "Taken at 1:15 PM there, it lands at 1:15 PM your time. Mid-afternoon. While you're at work. That's the point." },
-  { k: "04", title: "Schedule it", body: "Five children every day for a week. A child eats every day you do." },
+  { k: "01", title: "You give ₹25", body: "It takes about twenty seconds, and your receipt arrives almost straight away." },
+  { k: "02", title: "A kitchen cooks the meal", body: "A kitchen we work with cooks the food, serves a child, and takes a photo while they eat." },
+  { k: "03", title: "The photo reaches you", body: "If it was taken at 1:15 in the afternoon there, it reaches you at 1:15 your time, usually when you least expect it." },
+  { k: "04", title: "Do it every day, if you like", body: "You can feed five children every day for a week. A child eats on every day you choose." },
 ];
 
 /** Vertical timeline that draws itself as it scrolls into view. */

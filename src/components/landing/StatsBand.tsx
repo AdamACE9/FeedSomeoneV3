@@ -51,8 +51,8 @@ export default function StatsBand({ stats, showNumbers }: { stats: Stat[]; showN
         </span>
 
         <p className="mt-8 max-w-3xl display text-[clamp(28px,5vw,52px)] leading-[1.02]">
-          Not a statistic. <span className="text-marigold">A real child</span>, a real kitchen,
-          a real minute — and the photo to prove it.
+          Behind every donation is <span className="text-marigold">a child who actually ate</span> today.
+          We send you the photo, so you never have to take our word for it.
         </p>
 
         {showNumbers && (
@@ -67,7 +67,7 @@ export default function StatsBand({ stats, showNumbers }: { stats: Stat[]; showN
         )}
 
         <p className="mt-10 text-sm leading-relaxed text-paper/55">
-          Every donation gets a photo. Every receipt is numbered. Every kitchen is verified.
+          You get a photo of every meal you pay for, and a numbered receipt. We check every kitchen before it joins us.
         </p>
       </div>
     </section>
