@@ -4,6 +4,7 @@ import { adminDb } from "@/lib/supabase/server";
 import { countryFromHeaders, resolveCurrency } from "@/lib/geo";
 import { fmtTime } from "@/lib/deliver";
 import HeroCanvas from "@/components/landing/HeroCanvas";
+import LiveStrip from "@/components/landing/LiveStrip";
 import HowItWorks from "@/components/landing/HowItWorks";
 import StatsBand from "@/components/landing/StatsBand";
 import HeroCTA from "@/components/checkout/HeroCTA";
@@ -68,6 +69,10 @@ export default async function Landing() {
   const [stats, recent] = await Promise.all([loadStats(), loadRecent()]);
   const hero = recent[0] ?? null;
   const strip = recent.slice(1);
+  const stripItems = strip.map((p) => ({
+    id: p.id, url: p.url, city: p.city || "New Delhi",
+    time: fmtTime(p.takenAt, p.tz), takenAt: p.takenAt.toISOString(),
+  }));
   const showNumbers =
     stats.total_meals >= Number(process.env.STATS_MIN_MEALS ?? 500) &&
     stats.total_donors >= Number(process.env.STATS_MIN_DONORS ?? 100);
@@ -152,26 +157,7 @@ export default async function Landing() {
           </span>
         </div>
         <div className="no-bar mt-7 overflow-x-auto">
-          <div className="mx-auto flex max-w-6xl gap-4 px-5">
-            {strip.length ? (
-              strip.map((p) => (
-                <figure key={p.id} className="lift w-52 flex-none sm:w-56">
-                  <div className="photo aspect-[4/5] border border-ink/12">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={p.url} alt="A meal moment" />
-                    <span className="photo-stamp">{fmtTime(p.takenAt, p.tz)}</span>
-                  </div>
-                  <figcaption className="mt-2.5 text-[14px] text-ink/65">
-                    {p.city || "New Delhi"}
-                  </figcaption>
-                </figure>
-              ))
-            ) : (
-              <div className="w-full px-5 py-6 text-[15px] text-ink/55">
-                The first photos arrive when kitchens open — be the donor who triggers one.
-              </div>
-            )}
-          </div>
+          <LiveStrip initial={stripItems} />
         </div>
       </section>
 
