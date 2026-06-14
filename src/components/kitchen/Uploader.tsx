@@ -91,10 +91,12 @@ async function sendBatch(dataUrls: string[], note: string | null): Promise<Uploa
 export function Uploader({
   todayCount,
   allTimeCount,
+  waitingCount,
   recentPhotos,
 }: {
   todayCount: number;
   allTimeCount: number;
+  waitingCount: number;
   recentPhotos: RecentPhoto[];
 }) {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -331,6 +333,22 @@ export function Uploader({
 
   return (
     <div className="flex flex-col gap-6 px-4 pt-5 pb-10 max-w-sm mx-auto">
+      {/* ── Demand: donors waiting for a photo right now ─────────────────── */}
+      {waitingCount > 0 ? (
+        <div className="bg-clay text-paper px-4 py-3.5">
+          <div className="text-3xl font-bold" style={{ fontFamily: "var(--font-dm-mono)" }}>
+            {waitingCount}
+          </div>
+          <div className="text-[13px] leading-snug mt-1 text-paper/90" style={{ fontFamily: "var(--font-dm-mono)" }}>
+            {waitingCount === 1 ? "child is waiting" : "children are waiting"} for a meal photo. Cook, serve, and photograph to feed them.
+          </div>
+        </div>
+      ) : (
+        <div className="bg-leaf/10 border border-leaf/30 px-4 py-3 text-[13px] text-leaf" style={{ fontFamily: "var(--font-dm-mono)" }}>
+          All caught up — every waiting donor has a photo. Keep photographing as you serve.
+        </div>
+      )}
+
       {/* ── Stat chips ──────────────────────────────────────────────────── */}
       <div className="flex gap-3">
         <div className="flex-1 bg-sand border border-line px-4 py-3">

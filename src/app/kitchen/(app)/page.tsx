@@ -42,6 +42,15 @@ export default async function KitchenPage() {
     .select("id", { count: "exact", head: true })
     .eq("kitchen_id", kitchenId);
 
+  // ── demand: donors waiting for a meal photo right now ────────────────────
+  // A 'waiting' delivery means the photo pool was empty when their donation
+  // landed — shared, unfulfilled demand any kitchen can serve by photographing
+  // a meal. (Single-country today; scope by donation country_pref when global.)
+  const { count: waitingCount } = await db
+    .from("deliveries")
+    .select("id", { count: "exact", head: true })
+    .eq("status", "waiting");
+
   // ── last 6 uploads with signed thumbnails ───────────────────────────────
   const { data: recent } = await db
     .from("photos")
@@ -83,6 +92,7 @@ export default async function KitchenPage() {
     <Uploader
       todayCount={todayCount ?? 0}
       allTimeCount={allTimeCount ?? 0}
+      waitingCount={waitingCount ?? 0}
       recentPhotos={recentPhotos}
     />
   );
