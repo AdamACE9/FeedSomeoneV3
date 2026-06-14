@@ -96,3 +96,10 @@ session limits are tight. Commit after every stage.
 - **Still local-blocked:** Docker Desktop wedged (Windows `PendingFileRenameOperations` → needs a reboot). Not required — everything runs on cloud now. After reboot, `npm run setup` boots the local stack.
 - **Remaining (optional next pass):** deploy via `scripts/firebase-init.sh`+`deploy.sh` (needs Adam's Firebase login + Blaze click); dedicated specs for classroom / 3G-offline / blur / force-send (features built, not yet E2E-automated). Day-2 Stripe: `scripts/stripe-init.sh` + flip `PAYMENT_PROVIDER=stripe`.
 - Day 2 (when Stripe keys arrive): `stripe-init.sh`, flip `PAYMENT_PROVIDER=stripe`, smoke test.
+
+## Cloud config & secrets (live ops — read before touching auth or the DB)
+
+- **Supabase project ref:** `htcmvczrrabikzvaatfo`. **Management API token** lives in `.env.local` as `SUPABASE_ACCESS_TOKEN` (gitignored — NEVER put the value in a tracked file like this one). Reuse it: auth config = `PATCH https://api.supabase.com/v1/projects/<ref>/config/auth`; raw SQL = `POST .../database/query`.
+- **Auth URL config (fixed 2026-06-14):** Site URL + redirect allowlist were stuck on `localhost:3000`, so donor magic links opened localhost. Now set to the prod `hosted.app` URL (+ localhost for dev). When the custom domain lands, add `https://feedsomeone.org/**` to the allowlist **and** update `NEXT_PUBLIC_SITE_URL`. Magic-link redirect = `${NEXT_PUBLIC_SITE_URL}/auth/callback`.
+- **Seed logins:** admin `admin@feedsomeone.com` / `Admin@123` (reset 2026-06-14 after a test had changed it), kitchen `kitchen@feedsomeone.com` / `Kitchen@123`. A completed forced-password-change silently breaks the documented creds — reset via the service-role admin API if admin login fails.
+- **Security migration `0004_security_advisor_fixes.sql`** resolves the two Supabase Advisor CRITICALs (enable RLS on `_sql_applied`; `public_kitchens` → `security_invoker` + revoke `contact_email` from client roles). Apply via the Management API SQL endpoint or the Supabase SQL editor.
