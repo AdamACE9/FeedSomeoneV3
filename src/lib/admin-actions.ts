@@ -6,6 +6,7 @@
  */
 
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import crypto from "node:crypto";
 import { adminDb, audit } from "@/lib/supabase/server";
 import { allocateReceipt } from "@/lib/receipts";
@@ -27,14 +28,20 @@ function slugify(name: string): string {
 
 /* ── AUTH ─────────────────────────────────────────────────────────────────── */
 
-export async function adminLoginAction(formData: FormData) {
+export async function adminLoginAction(
+  _prev: { error: string | null },
+  formData: FormData,
+): Promise<{ error: string | null }> {
   const { serverClient } = await import("@/lib/supabase/server");
-  const email = String(formData.get("email") ?? "");
+  const email = String(formData.get("email") ?? "").trim();
   const password = String(formData.get("password") ?? "");
+  if (!email || !password) return { error: "Email and password are required." };
   const supa = await serverClient();
   const { error } = await supa.auth.signInWithPassword({ email, password });
-  if (error) return { error: error.message };
-  return { ok: true };
+  if (error) return { error: "Incorrect email or password." };
+  // Server-side redirect — sets the session cookie and navigates in one response,
+  // so /admin sees the session immediately (client router.push dropped it).
+  redirect("/admin");
 }
 
 export async function adminSignOutAction() {

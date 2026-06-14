@@ -1,45 +1,25 @@
 "use client";
 
-import { useState, useTransition } from "react";
-import { useRouter } from "next/navigation";
+import { useActionState } from "react";
+import { adminLoginAction } from "@/lib/admin-actions";
 
 export default function LoginForm() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const [pending, startTransition] = useTransition();
-  const router = useRouter();
-
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setError(null);
-    startTransition(async () => {
-      const fd = new FormData();
-      fd.set("email", email);
-      fd.set("password", password);
-      const { adminLoginAction } = await import("@/lib/admin-actions");
-      const res = await adminLoginAction(fd);
-      if ("error" in res && res.error) {
-        setError(res.error);
-      } else {
-        router.push("/admin");
-        router.refresh();
-      }
-    });
-  }
+  const [state, formAction, pending] = useActionState(adminLoginAction, {
+    error: null as string | null,
+  });
 
   return (
-    <form onSubmit={handleSubmit} className="bg-paper border border-line rounded p-6 space-y-4">
+    <form action={formAction} className="bg-paper border border-line rounded p-6 space-y-4" noValidate>
       <div>
         <label className="block text-sm font-medium text-ink mb-1" htmlFor="email">
           Email
         </label>
         <input
           id="email"
+          name="email"
           type="email"
           required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          disabled={pending}
           className="w-full border border-line rounded px-3 py-2 text-ink bg-paper focus:outline-none focus:border-clay text-base"
           autoComplete="username"
         />
@@ -50,17 +30,17 @@ export default function LoginForm() {
         </label>
         <input
           id="password"
+          name="password"
           type="password"
           required
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          disabled={pending}
           className="w-full border border-line rounded px-3 py-2 text-ink bg-paper focus:outline-none focus:border-clay text-base"
           autoComplete="current-password"
         />
       </div>
-      {error && (
+      {state.error && (
         <p className="text-clay text-sm" role="alert">
-          {error}
+          {state.error}
         </p>
       )}
       <button
