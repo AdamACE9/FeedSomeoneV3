@@ -258,17 +258,17 @@ export default async function Landing() {
       <section className="mx-auto max-w-6xl px-5 py-24 sm:py-32">
         <div className="grid items-center gap-y-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-x-16">
           <div>
-            <p className="timestamp text-clay">Since 2014</p>
+            <p className="timestamp text-clay">2015 – 2022</p>
             <h2 className="mt-3 display text-[clamp(38px,7vw,80px)]">We&apos;ve done<br />this before.</h2>
             <p className="mt-7 max-w-md text-[18px] leading-[1.55] text-ink/70">
-              Between 2014 and 2018, FeedSomeone served <b className="text-ink">eighteen million meals</b> to
+              Between 2015 and 2022, FeedSomeone served <b className="text-ink">eighteen million meals</b> to
               children across India. Then it stopped. We&apos;ve rebuilt it from scratch for 2026, with the
               proof of every meal built into how it works.
             </p>
           </div>
           <div className="lg:text-right">
             <div className="display text-[clamp(88px,18vw,200px)] leading-[0.8] text-clay">18M</div>
-            <p className="timestamp mt-3 text-ink/45">meals served · 2014–2018 · across India</p>
+            <p className="timestamp mt-3 text-ink/45">meals served · 2015–2022 · across India</p>
           </div>
         </div>
       </section>
