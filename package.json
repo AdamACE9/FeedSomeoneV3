@@ -20,6 +20,8 @@
     "@supabase/supabase-js": "^2",
     "date-fns": "^4",
     "date-fns-tz": "latest",
+    "lenis": "^1.3.23",
+    "motion": "^12.40.0",
     "next": "16.2.9",
     "pdf-lib": "latest",
     "qrcode": "latest",

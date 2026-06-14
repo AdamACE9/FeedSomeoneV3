@@ -1,25 +1,25 @@
-# Firebase App Hosting — FeedSomeone production config
-# Secrets are Cloud Secret Manager refs: scripts/firebase-init.sh creates them
-# (firebase apphosting:secrets:set NAME). Plain values are safe-to-expose only.
+# Firebase App Hosting — FeedSomeone production config.
+# Secrets are Cloud Secret Manager refs (firebase apphosting:secrets:set NAME).
+# Stripe block is added when real keys arrive (Day 2); until then PAYMENT_PROVIDER=mock.
 
 runConfig:
   cpu: 1
-  memoryMiB: 1024
+  memoryMiB: 2048
   minInstances: 0
   maxInstances: 4
   concurrency: 80
 
 env:
   - variable: NEXT_PUBLIC_SITE_URL
-    value: https://feedsomeone.org
+    value: https://feedsomeone--feedsomeone-786.us-central1.hosted.app # → feedsomeone.org once the domain is added
     availability: [BUILD, RUNTIME]
 
   - variable: NEXT_PUBLIC_SUPABASE_URL
-    value: https://YOUR-PROJECT-REF.supabase.co # ← supabase-init.sh prints this
+    value: https://htcmvczrrabikzvaatfo.supabase.co
     availability: [BUILD, RUNTIME]
 
   - variable: NEXT_PUBLIC_SUPABASE_ANON_KEY
-    value: YOUR-ANON-KEY # anon key is public by design
+    value: sb_publishable_GNOXes8ZmF24BD5PaO0zHQ_4zSQnE-0
     availability: [BUILD, RUNTIME]
 
   - variable: SUPABASE_SERVICE_ROLE_KEY
@@ -27,23 +27,11 @@ env:
     availability: [RUNTIME]
 
   - variable: PAYMENT_PROVIDER
-    value: mock # ← flip to `stripe` on Day 2; nothing else changes
+    value: mock # flip to `stripe` once stripe-init.sh has run + secrets are set
     availability: [RUNTIME]
 
   - variable: MOCK_WEBHOOK_SECRET
     secret: MOCK_WEBHOOK_SECRET
-    availability: [RUNTIME]
-
-  - variable: STRIPE_SECRET_KEY
-    secret: STRIPE_SECRET_KEY
-    availability: [RUNTIME]
-
-  - variable: NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
-    value: pk_live_or_test_HERE
-    availability: [BUILD, RUNTIME]
-
-  - variable: STRIPE_WEBHOOK_SECRET
-    secret: STRIPE_WEBHOOK_SECRET
     availability: [RUNTIME]
 
   - variable: EMAIL_PROVIDER
@@ -55,7 +43,7 @@ env:
     availability: [RUNTIME]
 
   - variable: EMAIL_FROM
-    value: FeedSomeone <photos@feedsomeone.org>
+    value: FeedSomeone <onboarding@resend.dev> # → photos@feedsomeone.org once the domain is verified
     availability: [RUNTIME]
 
   - variable: CRON_SECRET

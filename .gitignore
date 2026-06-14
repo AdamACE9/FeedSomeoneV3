@@ -44,3 +44,7 @@ tests/evidence/**/*.png
 
 # local email capture
 .mailbox/
+
+# real meal photos — source images; live copies are in Supabase storage
+seed-photos/
+scripts/shot.mjs

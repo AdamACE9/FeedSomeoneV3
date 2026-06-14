@@ -177,6 +177,47 @@ export default async function Landing() {
         </div>
       </section>
 
+      {/* ── what lands in your inbox ─────────────────────────────────────── */}
+      {hero && (
+        <section className="mx-auto max-w-6xl px-5 py-24 sm:py-28">
+          <div className="grid items-center gap-y-12 lg:grid-cols-[0.95fr_1.05fr] lg:gap-x-16">
+            <div className="lg:order-2">
+              <p className="timestamp text-clay">What lands in your inbox</p>
+              <h2 className="mt-3 display text-[clamp(32px,5.5vw,60px)]">Not a thank-you note.<br />The actual moment.</h2>
+              <p className="mt-6 max-w-md text-[18px] leading-[1.55] text-ink/70">
+                Mid-afternoon, while you&apos;re at your desk, an email arrives. One photo —
+                the child you fed, the plate in their hands, the kitchen behind them,
+                stamped with the exact minute it happened. You see who, what, where, and when.
+              </p>
+              <dl className="mt-8 grid grid-cols-2 gap-x-6 gap-y-5 max-w-md">
+                {[["Who you fed", "A real child, by name of kitchen"], ["What they ate", "A hot plate — dal, rice, chapati"], ["Where", "The verified partner kitchen"], ["When", "The exact minute, your timezone"]].map(([t, b]) => (
+                  <div key={t}>
+                    <dt className="timestamp text-ink/40">{t}</dt>
+                    <dd className="mt-1 text-[14px] leading-snug text-ink/70">{b}</dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+
+            {/* the card — the real email, framed like a phone-less product shot */}
+            <figure className="lg:order-1 mx-auto w-full max-w-sm">
+              <div className="border border-ink/12 bg-paper p-3 shadow-[0_30px_80px_-40px_rgba(26,15,10,0.5)]">
+                <div className="photo aspect-[4/5]">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={hero.url} alt="The photo a donor receives" />
+                  <span className="photo-stamp">{fmtTime(hero.takenAt, hero.tz)}</span>
+                </div>
+                <figcaption className="px-1 pt-3.5 pb-1">
+                  <div className="text-[15px] leading-tight">Fed by <b>{hero.donorName}</b></div>
+                  <div className="timestamp mt-1 text-ink/45">{hero.city || "New Delhi"} · a meal you paid for</div>
+                </figcaption>
+              </div>
+              <p className="timestamp mt-4 text-center text-ink/40">delivered at {fmtTime(hero.takenAt, hero.tz)} — the same minute it was taken</p>
+            </figure>
+          </div>
+        </section>
+      )}
+
       {/* ── how it works ─────────────────────────────────────────────────── */}
       <section className="mx-auto max-w-6xl px-5 py-20 sm:py-28">
         <div className="grid gap-y-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-x-16">
@@ -197,6 +238,49 @@ export default async function Landing() {
           { label: "partner kitchens", value: stats.kitchens },
         ]}
       />
+
+      {/* ── heritage — the return ────────────────────────────────────────── */}
+      <section className="mx-auto max-w-6xl px-5 py-24 sm:py-32">
+        <div className="grid items-center gap-y-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-x-16">
+          <div>
+            <p className="timestamp text-clay">Since 2014</p>
+            <h2 className="mt-3 display text-[clamp(38px,7vw,80px)]">This isn&apos;t new.<br />It&apos;s a return.</h2>
+            <p className="mt-7 max-w-md text-[18px] leading-[1.55] text-ink/70">
+              FeedSomeone served <b className="text-ink">eighteen million meals</b> to children across India —
+              then paused in 2018. A decade of proof. Today it&apos;s back, rebuilt from nothing for 2026:
+              every meal geo-verified, timestamped, and photographed to the minute.
+            </p>
+          </div>
+          <div className="lg:text-right">
+            <div className="display text-[clamp(88px,18vw,200px)] leading-[0.8] text-clay">18M</div>
+            <p className="timestamp mt-3 text-ink/45">meals served · 2014–2018 · across India</p>
+          </div>
+        </div>
+      </section>
+
+      {/* ── verification — how we keep it honest ─────────────────────────── */}
+      <section className="border-t border-ink/10 bg-sand/40 py-24 sm:py-28">
+        <div className="mx-auto max-w-6xl px-5">
+          <div className="max-w-3xl">
+            <p className="timestamp text-clay">How we keep it honest</p>
+            <h2 className="mt-3 display text-[clamp(32px,5.5vw,60px)]">Every meal is verified. Fraud stays near zero.</h2>
+          </div>
+          <div className="mt-14 grid gap-x-10 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              { k: "01", t: "Geo-fenced kitchens", b: "Every photo is checked against the kitchen's registered GPS. A meal can only be logged where it is actually served." },
+              { k: "02", t: "Timestamped to the minute", b: "Each photo carries the exact moment it was taken — the same minute it lands in your inbox. Time can't be faked." },
+              { k: "03", t: "Privacy-first faces", b: "Face detection protects every child — one tap blurs identities, and duplicate-photo detection flags any reuse." },
+              { k: "04", t: "Numbered receipts", b: "Every donation gets a sequential, dated FS-receipt. 100% goes to meals — the books are open by design." },
+            ].map((p) => (
+              <div key={p.k}>
+                <div className="timestamp text-ink/30">{p.k}</div>
+                <h3 className="mt-2 display text-[22px]">{p.t}</h3>
+                <p className="mt-2.5 text-[15px] leading-relaxed text-ink/65">{p.b}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* ── sign-off — feed someone, loud ────────────────────────────────── */}
       <section className="mx-auto max-w-6xl px-5 py-24 sm:py-32">
